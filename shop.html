@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gallery</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .gallery {
+  padding: 100px 20px;
+  background: #faf7f4;
+  text-align: center;
+}
+
+.gallery-title {
+  font-size: 42px;
+  margin-bottom: 12px;
+  color:#6a4a3a;
+}
+
+.gallery-subtitle {
+  color: #6a4a3a;
+  margin-bottom: 40px;
+}
+
+.gallery-filters button {
+  padding: 8px 18px;        /* 👈 smaller */
+  font-size: 14px;          /* 👈 smaller text */
+  border-radius: 999px;     /* pill but not tall */
+  min-height: unset;
+  height: auto;
+}
+
+
+
+.gallery-grid {
+  max-width: 1200px;
+  margin: auto;
+  display: grid;
+  grid-template-columns: repeat(3,1fr);
+  gap: 24px;
+}
+.gallery-item {
+  border-radius: 22px;
+  overflow: hidden;
+
+  opacity: 0;
+  transform:
+    translateY(120px)
+    scale(0.6)
+    rotate(-8deg);
+
+  transition:
+    opacity 0.25s ease-out,
+    transform 0.45s cubic-bezier(0.25, 1.6, 0.5, 1),
+    box-shadow 0.45s ease;
+}
+
+
+.gallery-item.show {
+  opacity: 1;
+  transform:
+    translateY(0)
+    scale(1)
+    rotate(0deg);
+
+  box-shadow:
+    0 25px 60px rgba(106, 74, 58, 0.35),
+    0 0 0 rgba(255,255,255,0.6);
+}
+
+
+.gallery-item.show {
+  animation: snapIn 0.55s ease-out;
+}
+
+@keyframes snapIn {
+  0% {
+    transform: translateY(120px) scale(0.6) rotate(-8deg);
+  }
+  60% {
+    transform: translateY(-6px) scale(1.04) rotate(1deg);
+  }
+  100% {
+    transform: translateY(0) scale(1) rotate(0);
+  }
+}
+.gallery-item:nth-child(1) { transition-delay: 0s; }
+.gallery-item:nth-child(2) { transition-delay: 0.08s; }
+.gallery-item:nth-child(3) { transition-delay: 0.16s; }
+.gallery-item:nth-child(4) { transition-delay: 0.24s; }
+.gallery-item:nth-child(5) { transition-delay: 0.32s; }
+.gallery-item:nth-child(6) { transition-delay: 0.40s; }
+.gallery-item:nth-child(7) { transition-delay: 0.48s; }
+.gallery-item:nth-child(8) { transition-delay: 0.56s; }
+
+.gallery-item.show:hover {
+  transform: scale(1.03);
+  box-shadow: 0 30px 70px rgba(106, 74, 58, 0.4);
+}
+
+/* PRODUCT CARD */
+.product-card {
+  background: #faf7f4;
+  border-radius: 24px;
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.product-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 20px 40px rgba(0,0,0,0.12);
+}
+
+/* IMAGE */
+.product-image img {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  display: block;
+}
+.product-image video {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  border-radius: 22px;
+}
+
+/* INFO */
+.product-info {
+  padding: 18px 20px 22px;
+  text-align: left;
+}
+
+.product-title {
+  font-size: 18px;
+  color: #c38a62;
+  margin: 0 0 12px;
+}
+
+/* PRICE + BUTTON */
+.product-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap:12px;
+}
+
+.product-price {
+  font-size: 20px;
+  font-weight: 600;
+  color: #2a1f1b;
+  font-variant-numeric: lining-nums tabular-nums;
+  font-feature-settings: "lnum" 1, "tnum" 1;
+}
+.product-btn {
+  background: #c38a62;
+  color: #fff;
+  border: none;
+  padding: 8px 16px;        /* 👈 same padding for both */
+  border-radius: 6px;
+  font-size: 13px;
+  cursor: pointer;
+  transition: background 0.25s ease, transform 0.2s ease;
+}
+
+.product-btn:hover {
+  background: #b5794f;
+  transform: translateY(-2px);
+}
+
+.gallery-card {
+  background: #fff;
+  border-radius: 22px;
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.gallery-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 18px 40px rgba(0,0,0,0.12);
+}
+.product-desc {
+  opacity: 1;
+  max-height: none;
+  margin-top: 12px;
+  color: #6a4a3a;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+
+.product-card.show-desc .product-bottom {
+  opacity: 0;                 /* 👈 fade out */
+  max-height: 0;              /* 👈 collapse */
+  overflow: hidden;
+  transition: opacity 0.3s ease, max-height 0.3s ease;  /* 👈 smooth hide */
+}
+
+.product-card.show-desc .product-desc {
+  max-height: 300px;          /* 👈 expand (adjust if needed) */
+  opacity: 1;                 /* 👈 fade in */
+  margin-top: 16px;           /* 👈 add spacing */
+}
+.product-info {
+  padding: 22px;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.product-title {
+  font-size: 20px;
+  color: #c38a62;
+  margin: 0;
+}
+
+.product-price {
+  font-size: 22px;
+  font-weight: 600;
+  color: #2a1f1b;
+  font-variant-numeric: lining-nums tabular-nums;
+}
+
+.product-desc {
+  font-size: 14px;
+  line-height: 1.6;
+  color: #6a4a3a;
+}
+
+.order-btn {
+  margin-top: 10px;
+  align-self: flex-start;
+
+  background: #c38a62;
+  color: #fff;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 8px;
+  font-size: 14px;
+  cursor: pointer;
+
+  transition: background 0.25s ease, transform 0.2s ease;
+}
+
+.order-btn:hover {
+  background: #b5794f;
+  transform: translateY(-2px);
+}
+.order-button {
+  background: #c38a62;
+  color: #fff;
+  border: none;
+
+  padding: 8px 10px;   /* ⬅ was 8px 16px */
+  min-width: auto;     /* ⬅ prevents stretching */
+
+  border-radius: 6px;
+  font-size: 13px;
+  cursor: pointer;
+
+  transition: background 0.25s ease, transform 0.2s ease;
+}
+
+.order-button:hover {
+  background: #b5794f;
+  transform: translateY(-2px);
+}
+
+.gallery-filters {
+  display: flex;
+  justify-content: center;
+  gap: 14px;
+  margin-bottom: 40px;
+}
+
+.filter-btn {
+  padding: 8px 20px;
+  border-radius: 999px;
+  border: 1px solid #e6ddd5;
+  background: #fff;
+  color: #6a4a3a;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.filter-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(195,138,98,0.25);
+}
+
+.filter-btn.active {
+  background: #c38a62;
+  color: #fff;
+  border-color: #c38a62;
+}
+
+.product-meta {
+  display: flex;
+  gap: 14px;
+  font-size: 13px;
+  color: #6a4a3a;
+  margin-bottom: 6px;
+}
+
+.video-length,
+.video-extra {
+  background: #f6efe9;
+  padding: 4px 8px;
+  border-radius: 999px;
+  font-weight: 500;
+}
+
+    </style>
+</head>
+<body>
+  <div class="page">
+    <header class="header">
+  <div class="container nav">
+    <a href="home.html" class="logo">
+  Giftart<span>.ge</span>
+</a>
+
+    <nav>
+      <a  href="home.html">მთავარი</a>
+      <a class="active" href="shop.html">გალერეა</a>
+      <a href="order.html">შეუკვეთე</a>
+      <a href="aboutus.html">ჩვენ შესახებ</a>
+      <a href="contact.html">კონტაქტი</a>
+      
+    </nav>
+  </div>
+</header>
+
+<section class="gallery">
+  
+  <h2 class="gallery-title">ჩვენი ნამუშევრები</h2>
+  <p class="gallery-subtitle">
+    აღმოაჩინე ხელოვნების კოლექცია
+  </p>
+
+  <div class="gallery-filters">
+  <button class="filter-btn active" data-filter="all">ყველა</button>
+  <button class="filter-btn" data-filter="photo">ფოტოები</button>
+  <button class="filter-btn" data-filter="video">ვიდეოები</button>
+</div>
+
+
+
+<div class="gallery-grid">
+
+  <div class="gallery-item product-card" data-type="photo">
+    <div class="product-image">
+      <img src="gallery1.jpg" loading="lazy">
+    </div>
+    <div class="product-info">
+      <h4 class="product-title">გოგონა და ძაღლი</h4>
+      <div class="product-bottom">
+  <span class="product-price">₾49</span>
+ <a href="order.html?from=gallery">
+  <button class="order-button">შეკვეთა</button>
+</a>
+
+
+</div>
+
+
+    </div>
+  </div>
+
+   <div class="gallery-item product-card" data-type="photo">
+    <div class="product-image">
+      <img src="gallery2.jpg" loading="lazy">
+    </div>
+    <div class="product-info">
+      <h4 class="product-title">გალაკტიონის მთაწმინდის მთვარე</h4>
+      <div class="product-bottom">
+  <span class="product-price">₾49</span>
+ <a href="order.html?from=gallery">
+  <button class="order-button">შეკვეთა</button>
+</a>
+
+</div>
+
+
+    </div>
+  </div>
+
+
+ <div class="gallery-item product-card" data-type="photo">
+    <div class="product-image">
+      <img src="gallery3.jpg" loading="lazy">
+    </div>
+    <div class="product-info">
+      <h4 class="product-title">აფხაზეთი</h4>
+      <div class="product-bottom">
+  <span class="product-price">₾49</span>
+   <a href="order.html?from=gallery">
+  <button class="order-button">შეკვეთა</button>
+</a>
+
+</div>
+
+
+    </div>
+  </div>
+
+   <div class="gallery-item product-card" data-type="photo">
+    <div class="product-image">
+      <img src="gallery4.jpg" loading="lazy">
+    </div>
+    <div class="product-info">
+      <h4 class="product-title">რაჭა-ლეჩხუმი</h4>
+      <div class="product-bottom">
+  <span class="product-price">₾49</span>
+  <a href="order.html?from=gallery">
+  <button class="order-button">შეკვეთა</button>
+</a>
+
+</div>
+
+    </div>
+  </div>
+
+  <div class="gallery-item product-card" data-type="photo">
+    <div class="product-image">
+      <img src="gallery5.jpg" loading="lazy">
+    </div>
+    <div class="product-info">
+      <h4 class="product-title">მარგარიტა დეიდა</h4>
+      <div class="product-bottom">
+  <span class="product-price">₾49</span>
+  <a href="order.html?from=gallery">
+  <button class="order-button">შეკვეთა</button>
+</a>
+
+</div>
+
+
+
+    </div>
+  </div>
+  <div class="gallery-item product-card" data-type="photo">
+    <div class="product-image">
+      <img src="gallery6.jpg" loading="lazy">
+    </div>
+    <div class="product-info">
+      <h4 class="product-title"> ვოლფგანგ ამადეუს მოცარტი</h4>
+      <div class="product-bottom">
+  <span class="product-price">₾49</span>
+  <a href="order.html?from=gallery">
+  <button class="order-button">შეკვეთა</button>
+</a>
+
+</div>
+
+
+    </div>
+  </div>
+  <div class="gallery-item product-card" data-type="photo">
+    <div class="product-image">
+      <img src="gallery7.jpg" loading="lazy">
+    </div>
+    <div class="product-info">
+      <h4 class="product-title">გოგონა და ძაღლი</h4>
+      <div class="product-bottom">
+  <span class="product-price">₾49</span>
+  <a href="order.html?from=gallery">
+  <button class="order-button">შეკვეთა</button>
+</a>
+
+</div>
+
+
+
+    </div>
+  </div>
+  <div class="gallery-item product-card" data-type="photo">
+    <div class="product-image">
+      <img src="gallery8.jpg" loading="lazy">
+    </div>
+    <div class="product-info">
+      <h4 class="product-title">ცხელი ძაღლი - კალდუნა</h4>
+      <div class="product-bottom">
+  <span class="product-price">₾49</span>
+  <a href="order.html?from=gallery">
+  <button class="order-button">შეკვეთა</button>
+</a>
+
+</div>
+
+
+
+    </div>
+  </div>
+
+
+    <div class="gallery-item product-card" data-type="video">
+    <div class="product-image">
+  <video
+    src="ისტორია ძაღლზე სახელად ბალუ.mp4"
+    controls
+    preload="metadata"
+    poster="balu.png"
+  ></video>
+</div>
+
+<div class="product-info">
+  <h4 class="product-title">ისტორია ძაღლზე სახელად ბალუ</h4>
+
+  <div class="product-meta">
+    <span class="video-extra">
+  <span class="plus">➕</span> დამატებითი დრო: 5 წმ = ₾20
+</span>
+
+  </div>
+
+  <div class="product-bottom">
+    <span class="product-price">₾150 (⏱ 30 წამი)</span>
+    <a href="order.html?from=video">
+  <button class="order-button">შეკვეთა</button>
+</a>
+  </div>
+</div>
+
+
+  </div>
+
+
+    <div class="gallery-item product-card" data-type="video">
+   <div class="product-image">
+  <video
+    src="მთაწმინდის მთვარე.mp4"
+    controls
+    preload="metadata"
+    poster="gala.png"
+  ></video>
+</div>
+
+<div class="product-info">
+  <h4 class="product-title">მთაწმინდის მთვარე</h4>
+
+  <div class="product-meta">
+    <span class="video-extra">
+  <span class="plus">➕</span> დამატებითი დრო: 5 წმ = ₾20
+</span>
+
+  </div>
+
+  <div class="product-bottom">
+    <span class="product-price">₾150 (⏱ 30 წამი)</span>
+    <a href="order.html?from=video">
+  <button class="order-button">შეკვეთა</button>
+</a>
+  </div>
+</div>
+  </div>
+  
+
+
+   <div class="gallery-item product-card" data-type="video">
+   <div class="product-image">
+  <video
+    src="50 ყველაზე ცნობილი კლასიკური ნაწარმოები - პირველი ნაწილი.mp4"
+    controls
+    preload="metadata"
+    poster="betho.png"
+  ></video>
+</div>
+
+<div class="product-info">
+  <h4 class="product-title">50 ყველაზე ცნობილი კლასიკური ნაწარმოები</h4>
+
+  <div class="product-meta">
+    <span class="video-extra">
+  <span class="plus">➕</span> დამატებითი დრო: 5 წმ = ₾20
+</span>
+
+  </div>
+
+  <div class="product-bottom">
+    <span class="product-price">₾150 (⏱ 30 წამი)</span>
+    <a href="order.html?from=video">
+  <button class="order-button">შეკვეთა</button>
+</a>
+  </div>
+</div>
+  </div>
+
+
+
+
+   <div class="gallery-item product-card" data-type="video">
+   <div class="product-image">
+  <video
+    src="ვარდები.mp4"
+    controls
+    preload="metadata"
+    poster="vardi.png"
+  ></video>
+</div>
+
+<div class="product-info">
+  <h4 class="product-title">ვარდები</h4>
+
+  <div class="product-meta">
+    <span class="video-extra">
+  <span class="plus">➕</span> დამატებითი დრო: 5 წმ = ₾20
+</span>
+
+  </div>
+
+  <div class="product-bottom">
+    <span class="product-price">₾150 (⏱ 30 წამი)</span>
+     <a href="order.html?from=video">
+  <button class="order-button">შეკვეთა</button>
+</a>
+  </div>
+</div>
+  </div>
+</div>
+</section>
+
+
+
+
+
+<div class="footer-wrapper">
+  <div class="footer-wave">
+  <!-- SVG WAVE -->
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"><path fill="#6a4a3a" fill-opacity="1" d="M0,128L48,117.3C96,107,192,85,288,90.7C384,96,480,128,576,138.7C672,149,768,139,864,133.3C960,128,1056,128,1152,112C1248,96,1344,64,1392,48L1440,32L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path></svg>
+
+  <!-- CONTENT ON WAVE -->
+  <div class="wave-content">
+
+    <!-- MIDDLE -->
+    <div class="footer-middle">
+      <div class="footer-block">
+        <h2>მენიუ</h2>
+        <a href="shop.html">მაღაზია</a>
+        <a href="order.html">შეუკვეთე</a>
+        <a href="aboutus.html">ჩვენ შესახებ</a>
+      </div>
+
+      <div class="footer-block">
+        <h2>კონტაქტი</h2>
+
+        <p class="phone">
+          <a href="tel:+995595699757">
+            <span>+995 595 699 757</span>
+          </a>
+        </p>
+
+        <p>
+          <a href="mailto:giftartt4@gmail.com">
+            ✉ giftartt4@gmail.com
+          </a>
+        </p>
+      </div>
+    </div>
+
+    <!-- BOTTOM -->
+    <div class="footer-copy">
+      © 2025 Giftart.ge — ყველა უფლება დაცულია
+    </div>
+
+  </div>
+</div>
+
+
+  </div>
+</footer>
+</div>
+<script src="shop.js">
+
+</script>
+<script src="page-transition.js"></script>
+
+</body>
+</html>
