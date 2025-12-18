@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>შეუკვეთე — Giftart.ge</title>
-  <link rel="stylesheet" href="../static/css/style.css">
+  <link rel="stylesheet" href="style.css">
   <style>
   *{ box-sizing:border-box; }
 body{
@@ -594,34 +594,73 @@ input[type="checkbox"] {
          STEP 2B: OPTION 2 (Upload 1 photo)
     ========================== -->
     <section id="step-opt2" class="order-step hidden" data-step="2">
-      <h2 class="frame-title">ატვირთე სასურველი ფოტო</h2>
-      <p class="muted"></p>
+  <h2 class="frame-title">ატვირთე სასურველი ფოტო</h2>
+  <p class="muted"></p>
 
-      <div class="card">
-        <label class="field">
-          <span></span>
-          <input id="opt2Photo" type="file" accept="image/*" hidden />
+  <!-- PHOTO UPLOAD -->
+  <div class="card">
+    <label class="field">
+      <span>ფოტოს ატვირთვა</span>
+      <input id="opt2Photo" type="file" accept="image/*" hidden />
+      <button
+        type="button"
+        class="upload-btn"
+        onclick="document.getElementById('opt2Photo').click()"
+      >
+        ფოტოს ატვირთვა
+      </button>
+    </label>
+    <div class="hint" id="opt2Hint">არაფერი არჩეულია</div>
+    <div id="photoPreview" class="photo-preview"></div>
+  </div>
 
-<button
-  type="button"
-  class="upload-btn"
-  onclick="document.getElementById('opt2Photo').click()"
->
-   ფოტოს ატვირთვა
-</button>
-
+  <!-- FRAME OPTIONS -->
+  <div class="two-col">
+    <div class="card">
+      <h3 class="card-title">ჩარჩოს ზომა</h3>
+      <div class="pill-grid">
+        <label class="pill">
+          <input type="radio" name="frameSize" value="A4">
+          <span>A4 (ფასი ₾49)</span>
         </label>
-
-        <div class="hint" id="opt2Hint">არაფერი არჩეულია</div>
-<div id="photoPreview" class="photo-preview"></div>
-
+        <label class="pill">
+          <input type="radio" name="frameSize" value="A3">
+          <span>A3 (ფასი ₾59)</span>
+        </label>
+        <label class="pill">
+          <input type="radio" name="frameSize" value="A2">
+          <span>A2 (ფასი ₾64)</span>
+        </label>
       </div>
+    </div>
 
-      <div class="step-actions">
-        <button class="btn" data-back type="button">← უკან</button>
-        <button class="btn primary" data-next type="button">შემდეგი →</button>
+    <div class="card">
+      <h3 class="card-title">ჩარჩო</h3>
+      <div class="pill-grid">
+        <label class="pill">
+          <input type="radio" name="frameType" value="black">
+          <span>შავი</span>
+        </label>
+        <label class="pill">
+          <input type="radio" name="frameType" value="white">
+          <span>თეთრი</span>
+        </label>
+        <label class="pill custom-pill">
+          <div class="pill-head">
+            <input type="radio" name="frameType" value="custom">
+            <span>სასურველი ფერი</span>
+          </div>
+          <textarea class="custom-size" placeholder="მიუთითეთ ფერი…" rows="1"></textarea>
+        </label>
       </div>
-    </section>
+    </div>
+  </div>
+
+  <div class="step-actions">
+    <button class="btn" data-back type="button">← უკან</button>
+    <button class="btn primary" data-next type="button">შემდეგი →</button>
+  </div>
+</section>
 
     <!-- =========================
          STEP 2C: OPTION 3 (Video order)
@@ -1029,7 +1068,7 @@ input[type="checkbox"] {
   </div>
 </footer>
 </div>
-  <script src="../static/js/order.js"></script>
-   <script src="../static/js/page-transition.js"></script>
+  <script src="order.js"></script>
+   <script src="page-transition.js"></script>
 </body>
 </html>
