@@ -104,7 +104,7 @@ body{
 
 .option-card:hover{
   transform: translateY(-2px);
-  box-shadow: 0 14px 28px rgba(0,0,0,0.05);
+  box-shadow: 0 14px 28px rgba(0,0,0,0.05); 
   border-color: #e2cfc3;
 }
 
@@ -214,8 +214,8 @@ input:focus, select:focus, textarea:focus{
 
 .btn.small {
   padding: 6px 10px;     
-  font-size: 13px;       
-  border-radius: 8px;    
+  font-size: 13px;        
+  border-radius: 8px;     
   line-height: 1;
 }
 
@@ -232,7 +232,6 @@ input:focus, select:focus, textarea:focus{
   background:#eee4dd;
   margin:18px 0;
 }
-
 
 .delivery-section{
   max-width:900px;
@@ -268,7 +267,6 @@ input:focus, select:focus, textarea:focus{
 }
 .copy-row input{ flex:1; }
 
-
 .people-fields{
   display:grid;
   gap:14px;
@@ -281,7 +279,6 @@ input:focus, select:focus, textarea:focus{
   background:#faf7f4;
 }
 .person-card h4{ margin:0 0 10px; color:#2a1f1b; }
-
 
 .modal{
   position:fixed;
@@ -350,8 +347,8 @@ input[type="checkbox"] {
   text-align: center;
 }
 #step-opt2 .card {
-  max-width: 370px;   
-  padding: 14px;      
+  max-width: 370px;  
+  padding: 14px;     
 }
 
 
@@ -366,7 +363,7 @@ input[type="checkbox"] {
   font-size: 14px;         
   cursor: pointer;
   transition: all 0.2s ease;
-  width: fit-content;      
+  width: fit-content;     
 }
 
 .upload-btn:hover {
@@ -463,54 +460,16 @@ input[type="checkbox"] {
   </div>
 </header>
   <main class="order-page">
+
     <section class="progress">
       <div class="progress-bar"><div id="progressFill" class="progress-fill"></div></div>
       <div id="progressText" class="progress-text">ნაბიჯი 1 / 4</div>
     </section>
-    <section id="step-style" class="order-step hidden" data-step="1">
-      <h1 class="page-title">აირჩიე არტის სტილი</h1>
-      <p class="page-subtitle">პირველი ნაბიჯი — აირჩიე სტილი</p>
 
-      <div class="options-grid">
-      
+   
+<section id="step-opt1" class="order-step active" data-step="1">
 
-        <button type="button" class="option-card" data-option="2" data-style="სასურველი ფოტოთი">
-          <h3>სასურველი ფოტოთი</h3>
-          <p>კრეატიული და მხატვრული</p>
-        </button>
-
-
-        <button type="button" class="option-card" data-option="4" data-style="მილოცვა">
-          <h3>მილოცვა</h3>
-          <p class="product-price">₾69 (⏱ 1 წთ) </p>
-          <p>მიულოცე დაბადების დღე შენს საყვარელ ადამიანს</p>
-        </button>
-      </div>
-
-      <div class="step-actions">
-        <button id="nextFromStyle" class="btn primary" type="button" disabled>შემდეგი →</button>
-      </div>
-    </section>
-
-    <section id="step-opt2" class="order-step hidden" data-step="2">
-  <h2 class="frame-title">ატვირთე სასურველი ფოტო</h2>
-  <p class="muted"></p>
-
-  <div class="card">
-    <label class="field">
-      <span>ფოტოს ატვირთვა</span>
-      <input id="opt2Photo" type="file" accept="image/*" hidden />
-      <button
-        type="button"
-        class="upload-btn"
-        onclick="document.getElementById('opt2Photo').click()"
-      >
-        ფოტოს ატვირთვა
-      </button>
-    </label>
-    <div class="hint" id="opt2Hint">არაფერი არჩეულია</div>
-    <div id="photoPreview" class="photo-preview"></div>
-  </div>
+  <h2 class="frame-title">ჩარჩოს არჩევა</h2>
 
   <div class="two-col">
     <div class="card">
@@ -552,113 +511,13 @@ input[type="checkbox"] {
       </div>
     </div>
   </div>
-
   <div class="step-actions">
     <button class="btn" data-back type="button">← უკან</button>
     <button class="btn primary" data-next type="button">შემდეგი →</button>
   </div>
 </section>
+   
 
-   <section id="step-opt4" class="order-step hidden" data-step="2">
-  <h2 class="frame-title">მილოცვა</h2>
-  <p class="muted"></p>
-
-  <div class="card">
-    <label class="field">
-      <span>რამდენი ადამიანისთვის?</span>
-      <select id="peopleCount">
-        <option value="">აირჩიე…</option>
-        <option value="1">1 ადამიანი</option>
-        <option value="2">2 ადამიანი</option>
-      </select>
-    </label>
-
-    <div id="peopleFields" class="people-fields"></div>
-
-    <hr class="sep" />
-
-    <label class="field">
-  <span>ფოტოების ატვირთვა (მინ 3)</span>
-
-  <input
-  id="greetingPhotos"
-  type="file"
-  accept="image/*"
-  multiple
-  hidden
-/>
-
-<button
-  type="button"
-  class="upload-btn"
-  onclick="document.getElementById('greetingPhotos').click()"
->
-  ფოტოების ატვირთვა
-</button>
-
-<div class="hint" id="greetingPhotosHint">0 ფოტო არჩეულია</div>
-<div id="greetingPhotosPreview" class="photo-preview"></div>
-
-
-  </div>
-
-
-  <div class="delivery-methods">
-    <h2 class="frame-title">აირჩიე მიწოდების მეთოდი</h2>
-
-    <label class="delivery-card">
-      <input type="radio" name="deliveryMethod" value="gmail" />
-      <div class="delivery-content">
-        <h3>Gmail</h3>
-        <p>ფაილი გამოგზავნება თქვენს Gmail-ზე</p>
-        <textarea
-          class="delivery-extra"
-          placeholder="შეიყვანეთ Gmail მისამართი…"
-          rows="2"
-        ></textarea>
-      </div>
-    </label>
-
-    <label class="delivery-card">
-      <input type="radio" name="deliveryMethod" value="dropbox" />
-      <div class="delivery-content">
-        <h3>Dropbox</h3>
-        <p>ფაილი აიტვირთება Dropbox-ზე</p>
-      </div>
-    </label>
-
-    <label class="delivery-card">
-      <input type="radio" name="deliveryMethod" value="online" />
-      <div class="delivery-content">
-        <h3>ონლაინ სტრიმი</h3>
-        <p>ბმული მიეწოდება ონლაინ ნახვისთვის</p>
-      </div>
-    </label>
-
-    <label class="delivery-card">
-      <input type="radio" name="deliveryMethod" value="other" />
-      <div class="delivery-content">
-        <h3>სხვა</h3>
-        <p>მიუთითეთ სასურველი მიწოდების მეთოდი</p>
-        <textarea
-          class="delivery-extra"
-          placeholder="მაგ: Google Drive, Telegram, WeTransfer…"
-          rows="2"
-        ></textarea>
-      </div>
-    </label>
-  </div>
-
-  <div class="step-actions">
-    <button class="btn" data-back type="button">← უკან</button>
-    <button class="btn primary" data-next type="button">შემდეგი →</button>
-  </div>
-
-
-  
-</section>
-
-  
     <section id="step-address" class="order-step hidden" data-step="3">
       <h2 class="frame-title">მისამართი</h2>
       <p class="muted"></p>
@@ -693,7 +552,7 @@ input[type="checkbox"] {
       </div>
     </section>
 
-    <section id="step-payment" class="order-step hidden" data-step="4">
+    <section id="step-payment" class="order-step hidden" data-step="3">
       <h2 class="frame-title">გადახდის მეთოდი</h2>
       <p class="muted"></p>
 
@@ -701,16 +560,15 @@ input[type="checkbox"] {
 
   <div class="two-col">
     <label class="field">
-      <span>სახელი</span>
-      <input id="lastName" type="text" />
-    </label>
+  <span>სახელი</span>
+  <input id="firstName" type="text" />  
+</label>
 
-    <label class="field">
-      <span>გვარი</span>
-      <input id="firstName" type="text" />
-    </label>
+<label class="field">
+  <span>გვარი</span>
+  <input id="lastName" type="text" /> 
+</label>
   </div>
-
 <label class="field">
   <span>ანგარიშის ნომერი (მიმღები გ.მ.)</span>
   <div class="copy-row">
@@ -822,7 +680,7 @@ input[type="checkbox"] {
   </div>
 </footer>
 </div>
-  <script src="order.js"></script>
+  <script src="order-photo.js"></script>
    <script src="page-transition.js"></script>
 </body>
 </html>

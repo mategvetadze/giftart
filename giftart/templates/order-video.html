@@ -213,9 +213,9 @@ input:focus, select:focus, textarea:focus{
 .btn.primary:hover{ box-shadow:0 16px 34px rgba(195,138,98,.28); }
 
 .btn.small {
-  padding: 6px 10px;     
-  font-size: 13px;       
-  border-radius: 8px;    
+  padding: 6px 10px;      
+  font-size: 13px;        
+  border-radius: 8px;     
   line-height: 1;
 }
 
@@ -232,7 +232,6 @@ input:focus, select:focus, textarea:focus{
   background:#eee4dd;
   margin:18px 0;
 }
-
 
 .delivery-section{
   max-width:900px;
@@ -268,7 +267,6 @@ input:focus, select:focus, textarea:focus{
 }
 .copy-row input{ flex:1; }
 
-
 .people-fields{
   display:grid;
   gap:14px;
@@ -281,7 +279,6 @@ input:focus, select:focus, textarea:focus{
   background:#faf7f4;
 }
 .person-card h4{ margin:0 0 10px; color:#2a1f1b; }
-
 
 .modal{
   position:fixed;
@@ -350,7 +347,7 @@ input[type="checkbox"] {
   text-align: center;
 }
 #step-opt2 .card {
-  max-width: 370px;   
+  max-width: 370px;  
   padding: 14px;      
 }
 
@@ -467,140 +464,67 @@ input[type="checkbox"] {
       <div class="progress-bar"><div id="progressFill" class="progress-fill"></div></div>
       <div id="progressText" class="progress-text">ნაბიჯი 1 / 4</div>
     </section>
-    <section id="step-style" class="order-step hidden" data-step="1">
-      <h1 class="page-title">აირჩიე არტის სტილი</h1>
-      <p class="page-subtitle">პირველი ნაბიჯი — აირჩიე სტილი</p>
 
-      <div class="options-grid">
-      
+   
+    <section id="step-opt3" class="order-step active" data-step="2">
+      <h2 class="frame-title">ვიდეოს შეკვეთა</h2>
+      <p class="muted"></p>
 
-        <button type="button" class="option-card" data-option="2" data-style="სასურველი ფოტოთი">
-          <h3>სასურველი ფოტოთი</h3>
-          <p>კრეატიული და მხატვრული</p>
-        </button>
+      <div class="card">
+  <label class="field">
+    <span>ფოტოების ატვირთვა (5–7)</span>
 
+    <input
+      id="videoPhotos"
+      type="file"
+      accept="image/*"
+      multiple
+      hidden
+    />
 
-        <button type="button" class="option-card" data-option="4" data-style="მილოცვა">
-          <h3>მილოცვა</h3>
-          <p class="product-price">₾69 (⏱ 1 წთ) </p>
-          <p>მიულოცე დაბადების დღე შენს საყვარელ ადამიანს</p>
-        </button>
-      </div>
+    <button
+      type="button"
+      class="upload-btn"
+      onclick="document.getElementById('videoPhotos').click()"
+    >
+      ფოტოების ატვირთვა
+    </button>
+  </label>
 
-      <div class="step-actions">
-        <button id="nextFromStyle" class="btn primary" type="button" disabled>შემდეგი →</button>
-      </div>
-    </section>
+  <div class="hint" id="videoPhotosHint">0 ფოტო არჩეულია</div>
+  <div id="videoPhotosPreview" class="photo-preview"></div>
 
-    <section id="step-opt2" class="order-step hidden" data-step="2">
-  <h2 class="frame-title">ატვირთე სასურველი ფოტო</h2>
-  <p class="muted"></p>
+ 
+  <label class="field">
+  <span>ტექსტი ვიდეოსთვის (არასავალდებულო)</span>
+  <textarea
+    id="videoText"
+    rows="3"
+    placeholder=""
+  ></textarea>
 
-  <div class="card">
-    <label class="field">
-      <span>ფოტოს ატვირთვა</span>
-      <input id="opt2Photo" type="file" accept="image/*" hidden />
-      <button
-        type="button"
-        class="upload-btn"
-        onclick="document.getElementById('opt2Photo').click()"
-      >
-        ფოტოს ატვირთვა
-      </button>
-    </label>
-    <div class="hint" id="opt2Hint">არაფერი არჩეულია</div>
-    <div id="photoPreview" class="photo-preview"></div>
-  </div>
+  <span>YouTube მუსიკის ბმული (არასავალდებულო)</span>
+  <input
+    id="musicUrl"
+    type="url"
+    placeholder="https://www.youtube.com/watch?v=..."
+  />
+</label>
+</div>
 
-  <div class="two-col">
-    <div class="card">
-      <h3 class="card-title">ჩარჩოს ზომა</h3>
-      <div class="pill-grid">
-        <label class="pill">
-          <input type="radio" name="frameSize" value="A4">
-          <span>A4 (ფასი ₾49)</span>
-        </label>
-        <label class="pill">
-          <input type="radio" name="frameSize" value="A3">
-          <span>A3 (ფასი ₾59)</span>
-        </label>
-        <label class="pill">
-          <input type="radio" name="frameSize" value="A2">
-          <span>A2 (ფასი ₾64)</span>
-        </label>
-      </div>
-    </div>
-
-    <div class="card">
-      <h3 class="card-title">ჩარჩო</h3>
-      <div class="pill-grid">
-        <label class="pill">
-          <input type="radio" name="frameType" value="black">
-          <span>შავი</span>
-        </label>
-        <label class="pill">
-          <input type="radio" name="frameType" value="white">
-          <span>თეთრი</span>
-        </label>
-        <label class="pill custom-pill">
-          <div class="pill-head">
-            <input type="radio" name="frameType" value="custom">
-            <span>სასურველი ფერი</span>
-          </div>
-          <textarea class="custom-size" placeholder="მიუთითეთ ფერი…" rows="1"></textarea>
-        </label>
-      </div>
-    </div>
-  </div>
-
-  <div class="step-actions">
+     
+ <div class="step-actions">
     <button class="btn" data-back type="button">← უკან</button>
     <button class="btn primary" data-next type="button">შემდეგი →</button>
   </div>
-</section>
+     
+    </section>
 
    <section id="step-opt4" class="order-step hidden" data-step="2">
   <h2 class="frame-title">მილოცვა</h2>
   <p class="muted"></p>
 
-  <div class="card">
-    <label class="field">
-      <span>რამდენი ადამიანისთვის?</span>
-      <select id="peopleCount">
-        <option value="">აირჩიე…</option>
-        <option value="1">1 ადამიანი</option>
-        <option value="2">2 ადამიანი</option>
-      </select>
-    </label>
-
-    <div id="peopleFields" class="people-fields"></div>
-
-    <hr class="sep" />
-
-    <label class="field">
-  <span>ფოტოების ატვირთვა (მინ 3)</span>
-
-  <input
-  id="greetingPhotos"
-  type="file"
-  accept="image/*"
-  multiple
-  hidden
-/>
-
-<button
-  type="button"
-  class="upload-btn"
-  onclick="document.getElementById('greetingPhotos').click()"
->
-  ფოტოების ატვირთვა
-</button>
-
-<div class="hint" id="greetingPhotosHint">0 ფოტო არჩეულია</div>
-<div id="greetingPhotosPreview" class="photo-preview"></div>
-
-
-  </div>
+ 
 
 
   <div class="delivery-methods">
@@ -658,58 +582,30 @@ input[type="checkbox"] {
   
 </section>
 
+    
   
-    <section id="step-address" class="order-step hidden" data-step="3">
-      <h2 class="frame-title">მისამართი</h2>
-      <p class="muted"></p>
-
-      <div class="card">
-        <div class="two-col">
-         <label class="field">
-  <span>ქალაქი / რეგიონი</span>
-  <input
-    id="cityRegion"
-    type="text"
-    placeholder=""
-  />
-</label>
-
-        </div>
-
-        <label class="field">
-          <span>ზუსტი მისამართი</span>
-          <input id="address" type="text" placeholder="ქუჩა, კორპუსი, ბინა…" />
-        </label>
-
-        <label class="field">
-          <span>კომენტარი კურიერისთვის (არასავალდებულო)</span>
-          <textarea id="addressNote" rows="3" placeholder=""></textarea>
-        </label>
-      </div>
-
-      <div class="step-actions">
-        <button class="btn" data-back type="button">← უკან</button>
-        <button class="btn primary" data-next type="button">შემდეგი →</button>
-      </div>
-    </section>
-
-    <section id="step-payment" class="order-step hidden" data-step="4">
+    <section id="step-payment" class="order-step hidden" data-step="3">
       <h2 class="frame-title">გადახდის მეთოდი</h2>
       <p class="muted"></p>
 
       <div class="card">
 
-  <div class="two-col">
-    <label class="field">
-      <span>სახელი</span>
-      <input id="lastName" type="text" />
-    </label>
+<div class="two-col">
+  <label class="field">
+    <span>სახელი</span>
+    <input id="firstName" type="text" />
+  </label>
 
-    <label class="field">
-      <span>გვარი</span>
-      <input id="firstName" type="text" />
-    </label>
-  </div>
+  <label class="field">
+    <span>გვარი</span>
+    <input id="lastName" type="text" />
+  </label>
+</div>
+
+<label class="field">
+  <span>ასაკი</span>
+  <input id="age" type="number" min="1" max="120" />
+</label>
 
 <label class="field">
   <span>ანგარიშის ნომერი (მიმღები გ.მ.)</span>
@@ -822,7 +718,7 @@ input[type="checkbox"] {
   </div>
 </footer>
 </div>
-  <script src="order.js"></script>
+  <script src="order-video.js"></script>
    <script src="page-transition.js"></script>
 </body>
 </html>
