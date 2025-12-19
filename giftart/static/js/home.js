@@ -59,7 +59,7 @@ document.addEventListener("keydown", (e) => {
   const active = document.activeElement;
 
   if (active && active.tagName === "VIDEO") {
-    e.preventDefault(); // stop page scroll
+    e.preventDefault(); 
 
     if (active.paused) {
       active.play();
@@ -79,7 +79,7 @@ const productObserver = new IntersectionObserver(
       if (entry.isIntersecting) {
         entry.target.classList.add("show");
       } else {
-        entry.target.classList.remove("show"); // 👈 KEY LINE
+        entry.target.classList.remove("show"); 
       }
     });
   },

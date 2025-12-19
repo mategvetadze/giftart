@@ -1,76 +1,23 @@
-// Check if coming from gallery
-const urlParams = new URLSearchParams(window.location.search);
-const fromGallery = urlParams.get('from') === 'gallery';
 
-// Initialize current step
-let currentStep = fromGallery ? 3 : 1;
 
-// At the very top, add this:
-if (fromGallery) {
-  window.addEventListener('DOMContentLoaded', function() {
-    document.getElementById('step-style').classList.remove('active');
-    document.getElementById('step-style').classList.add('hidden');
-    
-    document.getElementById('step-address').classList.add('active');
-    document.getElementById('step-address').classList.remove('hidden');
-    
-    const progressFill = document.getElementById('progressFill');
-    const progressText = document.getElementById('progressText');
-    progressFill.style.width = '50%';
-    progressText.textContent = 'ნაბიჯი 1 / 2';
-  });
-}
 
-// Find where you handle [data-next] clicks and add this:
-document.querySelectorAll('[data-next]').forEach(btn => {
-  btn.addEventListener('click', function() {
-    const currentSection = document.querySelector('.order-step.active');
-    
-    if (currentSection.id === 'step-address' && fromGallery) {
-      // Hide address
-      currentSection.classList.remove('active');
-      currentSection.classList.add('hidden');
-      
-      // Show payment
-      document.getElementById('step-payment').classList.remove('hidden');
-      document.getElementById('step-payment').classList.add('active');
-      
-      // Update progress
-      document.getElementById('progressFill').style.width = '100%';
-      document.getElementById('progressText').textContent = 'ნაბიჯი 2 / 2';
-    }
-  });
-});
 
-// Check if coming from video in shop
-if (urlParams.get('from') === 'video') {
-  window.addEventListener('DOMContentLoaded', function() {
-    // Hide step 1 (style selection)
-    document.getElementById('step-style').classList.remove('active');
-    document.getElementById('step-style').classList.add('hidden');
-    
-    // Show step-opt3 (video ordering)
-    document.getElementById('step-opt3').classList.remove('hidden');
-    document.getElementById('step-opt3').classList.add('active');
-    
-    // Show delivery section for videos
-    document.getElementById('delivery-section').classList.remove('hidden');
-    
-    // Update progress bar
-    const progressFill = document.getElementById('progressFill');
-    const progressText = document.getElementById('progressText');
-    progressFill.style.width = '33%';
-    progressText.textContent = 'ნაბიჯი 1 / 3';
-  });
-}
+
+const params = new URLSearchParams(window.location.search);
+const from = params.get("from");
+let initialized = false;
+
+const state = {
+    selectedOption: null,
+    selectedStyleText: "",
+  };
+
 
 
 function showError(message, fieldId = null) {
-  // Remove old errors
   document.querySelectorAll('.error-message').forEach(e => e.remove());
   document.querySelectorAll('.has-error').forEach(e => e.classList.remove('has-error'));
 
-  // Create error message
   const errorDiv = document.createElement('div');
   errorDiv.className = 'error-message show';
   errorDiv.textContent = message;
@@ -78,28 +25,23 @@ function showError(message, fieldId = null) {
   if (fieldId) {
     const field = document.getElementById(fieldId);
     if (field) {
-      // Check if field is inside a two-col (name/surname together)
       const twoCol = field.closest('.two-col');
       const fieldContainer = twoCol || field.closest('.field') || field.closest('.card');
       
       if (fieldContainer) {
-        // Insert error BEFORE the container
         fieldContainer.parentNode.insertBefore(errorDiv, fieldContainer);
         fieldContainer.classList.add('has-error');
         
-        // Scroll to error
         errorDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
         field.focus();
       }
     }
   } else {
-    // If no field specified, show at top
     const activeStep = document.querySelector('.order-step.active');
     activeStep.insertBefore(errorDiv, activeStep.firstChild);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
-  // Auto-hide after 5 seconds
   setTimeout(() => {
     errorDiv.remove();
     document.querySelectorAll('.has-error').forEach(e => e.classList.remove('has-error'));
@@ -115,8 +57,10 @@ document.addEventListener("DOMContentLoaded", () => {
   opt2: document.getElementById("step-opt2"),
   opt3: document.getElementById("step-opt3"),
   opt4: document.getElementById("step-opt4"),
+  address: document.getElementById("step-address"), 
   payment: document.getElementById("step-payment"),
 };
+
 
   const progressFill = document.getElementById("progressFill");
   const progressText = document.getElementById("progressText");
@@ -124,28 +68,28 @@ document.addEventListener("DOMContentLoaded", () => {
   const nextFromStyle = document.getElementById("nextFromStyle");
   const optionCards = Array.from(document.querySelectorAll(".option-card"));
 
-  // Option 2
+  
   const opt2Photo = document.getElementById("opt2Photo");
   const opt2Hint = document.getElementById("opt2Hint");
 
-  // Option 3
+
   const videoPhotos = document.getElementById("videoPhotos");
   const videoPhotosHint = document.getElementById("videoPhotosHint");
   const musicUrl = document.getElementById("musicUrl");
 
-  // Option 4
+
   const peopleCount = document.getElementById("peopleCount");
   const peopleFields = document.getElementById("peopleFields");
   const greetingPhotos = document.getElementById("greetingPhotos");
   const greetingPhotosHint = document.getElementById("greetingPhotosHint");
 
-  // Address
+ 
 const cityRegion = document.getElementById("cityRegion");
 
 
   const address = document.getElementById("address");
 
-  // Payment
+
   const firstName = document.getElementById("firstName");
   const lastName = document.getElementById("lastName");
   const phone = document.getElementById("phone");
@@ -154,17 +98,24 @@ const cityRegion = document.getElementById("cityRegion");
   const copyHint = document.getElementById("copyHint");
   const finishBtn = document.getElementById("finishBtn");
 
-  // Modal
-  const modal = document.getElementById("modal");
-  const modalOk = document.getElementById("modalOk");
+ 
+const modal = document.getElementById("modal");
+const modalOk = document.getElementById("modalOk");
 
-  const state = {
-    selectedOption: null, // "1" | "2" | "3" | "4"
-    selectedStyleText: "",
-  };
+modalOk.addEventListener("click", () => {
+  modal.classList.add("hidden");
+  modal.setAttribute("aria-hidden", "true");
+  window.location.href = "home.html";
+});
+
+ 
+  function optionUsesDelivery() {
+  return state.selectedOption === "3" || state.selectedOption === "4";
+}
 
  function setActiveStep(stepEl) {
-  Object.values(steps).forEach(s => {
+  // HARD reset
+  document.querySelectorAll(".order-step").forEach(s => {
     s.classList.remove("active");
     s.classList.add("hidden");
   });
@@ -172,22 +123,34 @@ const cityRegion = document.getElementById("cityRegion");
   stepEl.classList.remove("hidden");
   stepEl.classList.add("active");
 
-  toggleDelivery(stepEl.id); // ✅ ADD THIS LINE
-
+  toggleDelivery(stepEl.id);
   updateProgress();
+
   window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
 
-  function getTotalSteps() {
-    // Step count is always 4:
-    // 1 style, 2 option-specific, 3 address, 4 payment
-    return 3;
+
+function getTotalSteps() {
+  if (from === "video" || from === "greeting") {
+    return 2; 
   }
+  
+  if (state.selectedOption === "3" || state.selectedOption === "4") {
+    return 3; 
+  }
+  return 4;
+}
 
   function getCurrentStepNumber() {
     const active = document.querySelector(".order-step.active");
-    return Number(active?.dataset?.step || 1);
+    const stepNum = Number(active?.dataset?.step || 1);
+    
+    if (from === "video" || from === "greeting") {
+      return stepNum - 1;
+    }
+    
+    return stepNum;
   }
 
   function updateProgress() {
@@ -208,7 +171,6 @@ const cityRegion = document.getElementById("cityRegion");
   function validateOptionStep() {
   const opt = state.selectedOption;
 
-  // OPTION 1
   if (opt === "1") {
     const size = document.querySelector('input[name="frameSize"]:checked');
     const type = document.querySelector('input[name="frameType"]:checked');
@@ -217,8 +179,6 @@ const cityRegion = document.getElementById("cityRegion");
       showError("გთხოვ აირჩიო ჩარჩოს ზომა და ტიპი");
       return false;
     }
-
-    // Check custom fields
     if (type.value === "custom") {
       const textarea = type.closest(".custom-pill").querySelector(".custom-size");
       if (!textarea || !textarea.value.trim()) {
@@ -240,30 +200,54 @@ const cityRegion = document.getElementById("cityRegion");
     return true;
   }
 
-  // OPTION 2
-  if (opt === "2") {
-    if (!opt2Photo.files || opt2Photo.files.length !== 1) {
-      showError("გთხოვ ატვირთო ფოტო");
-      return false;
-    }
-    return true;
+ if (opt === "2") {
+  if (!opt2Photo.files || opt2Photo.files.length !== 1) {
+    showError("Please upload a photo.");
+    return false;
   }
 
-  // OPTION 3 (VIDEO)
+  const size = document.querySelector('input[name="frameSize"]:checked');
+  const type = document.querySelector('input[name="frameType"]:checked');
+
+  if (!size || !type) {
+    showError("Please choose frame size and frame type.");
+    return false;
+  }
+
+  if (size.value === "custom") {
+    const textarea = size.closest(".custom-pill").querySelector(".custom-size");
+    if (!textarea.value.trim()) {
+      showError("Please specify custom frame size.");
+      textarea.focus();
+      return false;
+    }
+  }
+
+  if (type.value === "custom") {
+    const textarea = type.closest(".custom-pill").querySelector(".custom-size");
+    if (!textarea.value.trim()) {
+      showError("Please specify custom frame color.");
+      textarea.focus();
+      return false;
+    }
+  }
+
+  return true;
+}
+
+
   if (opt === "3") {
     if (videoFiles.length < 5 || videoFiles.length > 7) {
       showError("გთხოვ ატვირთო 5-7 ფოტო");
       return false;
     }
     
-    // ✅ Check delivery selection
     const delivery = document.querySelector('input[name="deliveryMethod"]:checked');
     if (!delivery) {
       showError("გთხოვ აირჩიო მიწოდების მეთოდი");
       return false;
     }
     
-    // ✅ Check Gmail field if Gmail selected
     if (delivery.value === "gmail") {
       const textarea = delivery.closest(".delivery-card").querySelector(".delivery-extra");
       if (!textarea.value.trim()) {
@@ -273,7 +257,6 @@ const cityRegion = document.getElementById("cityRegion");
       }
     }
     
-    // ✅ Check "other" field if other selected
     if (delivery.value === "other") {
       const textarea = delivery.closest(".delivery-card").querySelector(".delivery-extra");
       if (!textarea.value.trim()) {
@@ -286,7 +269,6 @@ const cityRegion = document.getElementById("cityRegion");
     return true;
   }
 
-  // OPTION 4 (GREETING)
   if (opt === "4") {
     const count = Number(peopleCount.value || 0);
     if (!count) {
@@ -294,7 +276,6 @@ const cityRegion = document.getElementById("cityRegion");
       return false;
     }
 
-    // Check all people fields
     for (let i = 1; i <= count; i++) {
       if (!document.getElementById(`p_name_${i}`)?.value.trim() ||
           !document.getElementById(`p_surname_${i}`)?.value.trim() ||
@@ -305,20 +286,17 @@ const cityRegion = document.getElementById("cityRegion");
       }
     }
 
-    // Check photos
     if (greetingFiles.length < 3) {
       showError("გთხოვ ატვირთო მინიმუმ 3 ფოტო");
       return false;
     }
     
-    // ✅ Check delivery selection
     const delivery = document.querySelector('input[name="deliveryMethod"]:checked');
     if (!delivery) {
       showError("გთხოვ აირჩიო მიწოდების მეთოდი");
       return false;
     }
     
-    // ✅ Check Gmail field if Gmail selected
     if (delivery.value === "gmail") {
       const textarea = delivery.closest(".delivery-card").querySelector(".delivery-extra");
       if (!textarea.value.trim()) {
@@ -327,8 +305,6 @@ const cityRegion = document.getElementById("cityRegion");
         return false;
       }
     }
-    
-    // ✅ Check "other" field if other selected
     if (delivery.value === "other") {
       const textarea = delivery.closest(".delivery-card").querySelector(".delivery-extra");
       if (!textarea.value.trim()) {
@@ -350,46 +326,71 @@ if (!receiptFile) {
 }
 
 
-  function validateAddressStep() {
-     return cityRegion.value.trim() && address.value.trim();
+ function validateAddressStep() {
+ const card = document.querySelector("#step-address .card");
+
+  card.querySelectorAll(".error-message").forEach(e => e.remove());
+
+  let hasError = false;
+
+  if (!cityRegion.value.trim()) {
+    hasError = true;
+    cityRegion.style.borderColor = "#c38a62";
+  } else {
+    cityRegion.style.borderColor = "";
   }
+
+  if (!address.value.trim()) {
+    hasError = true;
+    address.style.borderColor = "#c38a62";
+  } else {
+    address.style.borderColor = "";
+  }
+
+  if (hasError) {
+    const error = document.createElement("div");
+    error.className = "error-message show";
+    error.textContent = "შეავსე მისამართის ყველა ველი";
+
+    card.insertBefore(error, card.firstChild);
+
+    error.scrollIntoView({ behavior: "smooth", block: "center" });
+    return false;
+  }
+
+  return true;
+}
+
+
 
  
 
   function validatePaymentStep() {
-  // Check name, surname, phone first
   if (!firstName.value.trim() || !lastName.value.trim() || !phone.value.trim()) {
     showError("გთხოვ შეავსო სახელი/გვარი და ტელეფონის ნომერი.", "lastName");
     return false;
   }
 
-  // Then check receipt separately
   if (!receiptFile) {
-    // Remove old errors
     document.querySelectorAll('.error-message').forEach(e => e.remove());
     
-    // Create error
     const errorDiv = document.createElement('div');
     errorDiv.className = 'error-message show';
     errorDiv.textContent = 'გთხოვ ატვირთო გადახდის ქვითარი 📄';
     
-    // Find the phone input's parent card and insert after phone field
     const phoneField = document.getElementById('phone');
     const phoneContainer = phoneField.closest('.field');
     
     if (phoneContainer) {
-      // Insert error after the phone field
       phoneContainer.parentNode.insertBefore(errorDiv, phoneContainer.nextSibling);
       errorDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
     
-    // Highlight upload button
     const uploadBtn = document.querySelector('#step-payment .upload-btn');
     if (uploadBtn) {
       uploadBtn.style.borderColor = '#c38a62';
     }
     
-    // Auto-hide after 5 seconds
     setTimeout(() => {
       errorDiv.remove();
       if (uploadBtn) {
@@ -405,7 +406,6 @@ if (!receiptFile) {
 }
 
 
-  // ===== Step 1 (choose) =====
   optionCards.forEach(card => {
     card.addEventListener("click", () => {
       optionCards.forEach(c => c.classList.remove("selected"));
@@ -416,21 +416,24 @@ if (!receiptFile) {
       nextFromStyle.disabled = false;
     });
   });
+if (from === "photo" || from === "video" || from === "greeting") {
+  optionCards.forEach(card => {
+    card.style.pointerEvents = "none";
+    card.style.opacity = "0.5";
+  });
+}
 
   nextFromStyle.addEventListener("click", () => {
     if (!state.selectedOption) return;
     showOptionStep();
   });
 
-  // ===== Option 2 photo hint =====
   opt2Photo?.addEventListener("change", () => {
     const f = opt2Photo.files?.[0];
     opt2Hint.textContent = f ? `არჩეულია: ${f.name}` : "არაფერი არჩეულია";
   });
 
   
-
-  // ===== Option 4 people fields =====
   peopleCount?.addEventListener("change", () => {
     const count = Number(peopleCount.value || 0);
     peopleFields.innerHTML = "";
@@ -468,42 +471,98 @@ if (!receiptFile) {
     }
   });
 
+ document.addEventListener("click", (e) => {
+  const back = e.target.closest("[data-back]");
+  const next = e.target.closest("[data-next]");
+
+  if (next) {
+    const active = document.querySelector(".order-step.active");
+    if (!active) return;
+
+    if (
+  active === steps.opt1 ||
+  active === steps.opt2 ||
+  active === steps.opt3 ||
+  active === steps.opt4
+) {
+  if (!validateOptionStep()) {
+    showError("გთხოვ, შეავსე ყველა ველი");
+    return;
+  }
+
+  if (optionUsesDelivery()) {
+    setActiveStep(steps.payment);
+  } else {
+    setActiveStep(steps.address);
+  }
+
+  return;
+}
 
 
-  // ===== Back / Next buttons (generic) =====
-  document.addEventListener("click", (e) => {
-    const back = e.target.closest("[data-back]");
-    const next = e.target.closest("[data-next]");
-if (back) {
+
+   if (active === steps.address) {
+  if (!validateAddressStep()) {
+    return;
+  }
+
+  setActiveStep(steps.payment);
+  return;
+}
+
+  }
+
+
+
+
+  if (back) {
   const active = document.querySelector(".order-step.active");
   if (!active) return;
 
-  if (active === steps.opt1 || active === steps.opt2 || active === steps.opt3 || active === steps.opt4) {
-    setActiveStep(steps.style);
+if (
+  active === steps.opt1 ||
+  active === steps.opt2 ||
+  active === steps.opt3 ||
+  active === steps.opt4
+) {
+  if (from === "photo" || from === "video" || from === "greeting") {
+    window.location.href = "shop.html";
     return;
   }
-  if (active === steps.payment) {
-    showOptionStep();  // ✅ Go back to option step
-    return;
-  }
+  setActiveStep(steps.style);
+  return;
 }
 
-if (next) {
-  const active = document.querySelector(".order-step.active");
-  if (!active) return;
 
-  if (active === steps.opt1 || active === steps.opt2 || active === steps.opt3 || active === steps.opt4) {
-    if (!validateOptionStep()) {
-      showError("გთხოვ, შეავსო/აირჩიო ყველა საჭირო ველი ამ ნაბიჯზე.");
-      return;
-    }
-    setActiveStep(steps.payment);  // ✅ Go directly to payment
+
+  if (active === steps.address) {
+  if (state.selectedOption) {
+    showOptionStep();      
+  } else {
+    setActiveStep(steps.style); 
+  }
+  return;
+}
+
+
+if (active === steps.payment) {
+
+  if (optionUsesDelivery()) {
+    showOptionStep();
     return;
   }
-}
-  });
 
-  // ===== Copy account number =====
+  setActiveStep(steps.address);
+  return;
+}
+
+
+}
+
+  
+});
+
+
   copyBtn?.addEventListener("click", async () => {
     try {
       await navigator.clipboard.writeText(accountNumber.value);
@@ -514,26 +573,40 @@ if (next) {
     }
   });
 
-  // ===== Finish =====
   finishBtn?.addEventListener("click", () => {
     if (!validatePaymentStep()) {
-      return; // Error already shown in validatePaymentStep
+      return; 
     }
 
-    // Here you can send data to backend later (fetch/POST).
-    // For now: show confirmation modal.
     modal.classList.remove("hidden");
     modal.setAttribute("aria-hidden", "false");
   });
 
-  modalOk?.addEventListener("click", () => {
-    modal.classList.add("hidden");
-    modal.setAttribute("aria-hidden", "true");
-    window.location.href = "home.html";
-  });
+  
+ 
+if (!initialized) {
+  if (from === "photo") {
+    state.selectedOption = "2";    
+    setActiveStep(steps.opt2);
+  }
+  else if (from === "video") {
+    state.selectedOption = "3";
+    setActiveStep(steps.opt3);
+  } 
+  else if (from === "greeting") {
+    state.selectedOption = "4";
+    setActiveStep(steps.opt4);
+  } 
+  else {
+    setActiveStep(steps.style);
+  }
 
-  // Start
-  setActiveStep(steps.style);
+  initialized = true;
+}
+
+
+
+
 });
 
 
@@ -593,20 +666,18 @@ if (receiptInput) {
       return;
     }
 
-    receiptFile = file; // ✅ STORE RECEIPT
+    receiptFile = file; 
     receiptHint.textContent = file.name;
 
     const wrapper = document.createElement("div");
     wrapper.className = "preview-item";
 
-    // ✅ IMAGE PREVIEW
     if (file.type.startsWith("image/")) {
       const img = document.createElement("img");
       img.src = URL.createObjectURL(file);
       wrapper.appendChild(img);
     }
 
-    // ✅ PDF PREVIEW (ICON)
     if (file.type === "application/pdf") {
       const pdfLabel = document.createElement("div");
       pdfLabel.textContent = "📄 PDF ქვითარი";
@@ -615,14 +686,13 @@ if (receiptInput) {
       wrapper.appendChild(pdfLabel);
     }
 
-    // ❌ REMOVE BUTTON
     const removeBtn = document.createElement("button");
     removeBtn.type = "button";
     removeBtn.textContent = "×";
 
     removeBtn.onclick = () => {
       receiptInput.value = "";
-      receiptFile = null; // ❌ RESET
+      receiptFile = null; 
       receiptPreview.innerHTML = "";
       receiptHint.textContent = "არაფერი არჩეულია";
     };
@@ -642,7 +712,6 @@ if (videoInput) {
   videoInput.addEventListener("change", () => {
     const selectedFiles = Array.from(videoInput.files);
 
-    // max 7 validation
     if (videoFiles.length + selectedFiles.length > 7) {
       alert("შეგიძლიათ მაქსიმუმ 7 ფოტო ატვირთოთ");
       videoInput.value = "";
@@ -653,7 +722,7 @@ if (videoInput) {
       videoFiles.push(file);
     });
 
-    videoInput.value = ""; // reset input
+    videoInput.value = "";
     updateVideoPreview();
   });
 }
@@ -682,10 +751,8 @@ function updateVideoPreview() {
     videoPreview.appendChild(item);
   });
 
-  // ✅ COUNTER (THIS WAS MISSING / WRONG BEFORE)
   videoHint.textContent = `${videoFiles.length} ფოტო არჩეულია`;
 
-  // min validation message
   if (videoFiles.length < 5) {
     videoHint.textContent += " (მინ 5 საჭიროა)";
   }
@@ -728,7 +795,7 @@ if (greetingInput) {
     const files = Array.from(greetingInput.files);
     greetingFiles.push(...files);
 
-    greetingInput.value = ""; // reset input
+    greetingInput.value = ""; 
     updateGreetingPreview();
   });
 }
@@ -807,7 +874,6 @@ function showDeliveryIfNeeded(option) {
   } else {
     deliverySection.classList.add("hidden");
 
-    // reset delivery selection
     document
       .querySelectorAll('input[name="deliveryMethod"]')
       .forEach(r => (r.checked = false));
@@ -833,11 +899,9 @@ function validateDeliveryForOption(option) {
 
   const error = document.getElementById("deliveryExtraError");
 
-  // reset
   textarea.classList.remove("field-invalid");
   error.classList.add("hidden");
 
-  // GMAIL
   if (selected.value === "gmail") {
     const email = textarea.value.trim();
 
@@ -858,7 +922,6 @@ function validateDeliveryForOption(option) {
     }
   }
 
-  // OTHER
   if (selected.value === "disk") {
     if (!textarea.value.trim()) {
       textarea.classList.add("field-invalid");
@@ -884,7 +947,6 @@ function toggleDelivery(stepId) {
   }
 
   if (stepId === "step-opt4") {
-    // only show delivery when opt4 content is ready
     if (checkOpt4Ready()) {
       delivery.classList.remove("hidden");
     } else {
@@ -913,12 +975,6 @@ function checkOpt4Ready() {
   return greetingFiles.length >= 3;
 }
 
-function maybeShowOpt4Delivery() {
-  // Remove this function - not needed anymore
-}
-
-// Remove this line:
-// peopleCount.addEventListener("change", maybeShowOpt4Delivery);
 
 function maybeShowOpt4Delivery() {
   if (state.selectedOption === "4" && checkOpt4Ready()) {
@@ -927,5 +983,4 @@ function maybeShowOpt4Delivery() {
 }
 
 peopleCount.addEventListener("change", maybeShowOpt4Delivery);
-
 

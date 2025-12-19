@@ -5,7 +5,6 @@ document.addEventListener("DOMContentLoaded", () => {
   links.forEach(link => {
     const href = link.getAttribute("href");
 
-    // Ignore external links
     if (
       href.startsWith("http") ||
       href.startsWith("#") ||

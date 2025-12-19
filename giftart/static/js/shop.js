@@ -22,7 +22,6 @@ const animated = document.querySelectorAll(".gallery-item");
 
   filterButtons.forEach(btn => {
     btn.addEventListener("click", () => {
-      // active state
       filterButtons.forEach(b => b.classList.remove("active"));
       btn.classList.add("active");
 
