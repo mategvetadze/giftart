@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="ka">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Login — Giftart.ge</title>
+
+<style>
+*{box-sizing:border-box;}
+body{
+  margin:0;
+  font-family:Georgia,serif;
+  background:#faf7f4;
+  color:#2a1f1b;
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.admin-box{
+  width:100%;
+  max-width:420px;
+  background:white;
+  padding:34px 30px;
+  border-radius:22px;
+  box-shadow:0 18px 40px rgba(195,138,98,.35);
+  text-align:center;
+  animation:fadeIn .6s ease;
+}
+@keyframes fadeIn{
+  from{opacity:0; transform:translateY(20px);}
+  to{opacity:1; transform:translateY(0);}
+}
+
+h1{
+  margin-top:0;
+  color:#c38a62;
+  font-size:25px;
+}
+.subtitle{
+  font-size:14px;
+  color:#7a5a48;
+  margin-bottom:24px;
+}
+
+.field{
+  text-align:left;
+  margin-bottom:18px;
+  position:relative;
+}
+.field span{
+  font-size:14px;
+  display:block;
+  margin-bottom:6px;
+  color:#5f4336;
+}
+.field input{
+  width:100%;
+  padding:11px 12px;
+  border-radius:12px;
+  border:1px solid #d6c3b3;
+  outline:none;
+  font-size:14px;
+  transition:.25s;
+}
+.field input:focus{
+  border-color:#c38a62;
+  box-shadow:0 0 8px rgba(195,138,98,.6);
+  transform:scale(1.01);
+}
+
+.eye-btn{
+  position:absolute;
+  right:10px;
+  bottom:9px;
+  width:32px;
+  height:32px;
+  border-radius:50%;
+  background:#f1e4da;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  cursor:pointer;
+  transition:.25s;
+  user-select:none;
+}
+.eye-btn:hover{
+  background:#c38a62;
+  color:white;
+  transform:scale(1.1);
+}
+
+.login-btn{
+  width:100%;
+  padding:12px;
+  margin-top:4px;
+  border-radius:999px;
+  border:none;
+  background:#c38a62;
+  color:white;
+  font-size:15px;
+  cursor:pointer;
+  transition:.25s;
+}
+.login-btn:hover{
+  background:#d39a72;
+  transform:translateY(-2px) scale(1.02);
+  box-shadow:0 12px 22px rgba(195,138,98,.35);
+}
+.error{
+  color:#b03131;
+  font-size:13px;
+  margin-bottom:10px;
+  display:none;
+}
+</style>
+</head>
+
+<body>
+
+<div class="admin-box">
+  <h1>ადმინის პანელი</h1>
+  <p class="subtitle">შეიყვანე ადმინისტრატორის მონაცემები</p>
+
+  <div class="error" id="errorMsg">გთხოვ შეავსო ყველა ველი</div>
+
+  <form onsubmit="return validateAdmin()">
+
+    <div class="field">
+      <span>მომხმარებელი</span>
+      <input type="text" id="adminUser" placeholder="მომხმარებლის სახელი">
+    </div>
+
+    <div class="field">
+      <span>პაროლი</span>
+      <input type="password" id="adminPass" placeholder="შეიყვანე პაროლი">
+      <div class="eye-btn" onclick="togglePassword()">🙈</div>
+
+    </div>
+
+    <button class="login-btn">შესვლა</button>
+  </form>
+</div>
+
+
+<script>
+function togglePassword(){
+  const pass = document.getElementById("adminPass");
+  pass.type = pass.type === "password" ? "text" : "password";
+}
+
+function validateAdmin(){
+  const user = document.getElementById("adminUser").value.trim();
+  const pass = document.getElementById("adminPass").value.trim();
+  const error = document.getElementById("errorMsg");
+
+  if(!user || !pass){
+    error.textContent = "გთხოვ შეავსო ყველა ველი";
+    error.style.display = "block";
+    return false;
+  }
+
+  if(user !== "admin" || pass !== "12345"){
+    error.textContent = "არასწორი მონაცემებია";
+    error.style.display = "block";
+    return false;
+  }
+
+  error.style.display = "none";
+  window.location.href = "admindashboard.html";
+  return false;
+}
+</script>
+
+</body>
+</html>
