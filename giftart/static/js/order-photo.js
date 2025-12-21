@@ -1,3 +1,13 @@
+function fileToBase64(file) {
+  return new Promise(resolve => {
+    if (!file) return resolve("");
+    const reader = new FileReader();
+    reader.onload = e => resolve(e.target.result);
+    reader.readAsDataURL(file);
+  });
+}
+
+
 document.addEventListener("DOMContentLoaded", () => {
 
   steps = [...document.querySelectorAll(".order-step")];
@@ -184,6 +194,7 @@ if (index === 0) {
   const finishBtn = document.getElementById("finishBtn");
 
   finishBtn.addEventListener("click", () => {
+    savePhotoOrder();
     if (!validateCurrentStep()) return;
 
     modal.classList.remove("hidden");
@@ -250,3 +261,40 @@ if (receiptInput) {
     receiptPreview.appendChild(wrapper);
   });
 }
+
+async function savePhotoOrder() {
+
+  let orders = JSON.parse(localStorage.getItem("photoOrders") || "[]");
+
+  const chosenPhoto = document.getElementById("opt2Photo")?.files?.[0];
+  const receipt = document.getElementById("receiptPhoto")?.files?.[0];
+
+  const order = {
+    id: orders.length + 1,
+
+    frameSize: document.querySelector('input[name="frameSize"]:checked')?.value || "",
+    frameType: document.querySelector('input[name="frameType"]:checked')?.value || "",
+    customFrame: document.querySelector(".custom-size")?.value || "",
+
+    city: document.getElementById("cityRegion")?.value || "",
+    address: document.getElementById("address")?.value || "",
+    addressNote: document.getElementById("addressNote")?.value || "",
+
+    firstName: document.getElementById("firstName")?.value || "",
+    lastName: document.getElementById("lastName")?.value || "",
+    phone: document.getElementById("phone")?.value || "",
+
+    paymentNote: document.getElementById("paymentNote")?.value || "",
+
+    chosenPhoto: await fileToBase64(chosenPhoto),
+    receiptPhoto: await fileToBase64(receipt),
+
+    created: new Date().toLocaleString()
+  };
+
+  orders.push(order);
+  localStorage.setItem("photoOrders", JSON.stringify(orders));
+
+  console.log("Saved", order);
+}
+

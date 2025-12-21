@@ -90,3 +90,10 @@ const productObserver = new IntersectionObserver(
 );
 
 products.forEach(p => productObserver.observe(p));
+
+const burger = document.getElementById("burgerBtn");
+const nav = document.getElementById("mobileNav");
+
+burger.addEventListener("click", () => {
+  nav.classList.toggle("show");
+});
