@@ -16,6 +16,7 @@ body{
   display:flex;
   align-items:center;
   justify-content:center;
+  padding:20px;
 }
 
 .admin-box{
@@ -114,6 +115,85 @@ h1{
   margin-bottom:10px;
   display:none;
 }
+
+@media (max-width:480px){
+  body{
+    padding:16px;
+  }
+  .admin-box{
+    padding:28px 24px;
+    border-radius:18px;
+    box-shadow:0 12px 30px rgba(195,138,98,.3);
+  }
+  h1{
+    font-size:22px;
+  }
+  .subtitle{
+    font-size:13px;
+    margin-bottom:20px;
+  }
+  .field{
+    margin-bottom:16px;
+  }
+  .field span{
+    font-size:13px;
+  }
+  .field input{
+    padding:10px 11px;
+    font-size:13px;
+  }
+  .eye-btn{
+    width:30px;
+    height:30px;
+    right:8px;
+    bottom:8px;
+  }
+  .login-btn{
+    padding:11px;
+    font-size:14px;
+  }
+  .error{
+    font-size:12px;
+  }
+}
+
+@media (max-width:360px){
+  body{
+    padding:12px;
+  }
+  .admin-box{
+    padding:24px 20px;
+    border-radius:16px;
+  }
+  h1{
+    font-size:20px;
+  }
+  .subtitle{
+    font-size:12px;
+  }
+  .field input{
+    padding:9px 10px;
+  }
+}
+
+@media (max-height:500px) and (orientation:landscape){
+  body{
+    padding:10px;
+  }
+  .admin-box{
+    padding:20px;
+  }
+  h1{
+    font-size:20px;
+    margin-bottom:8px;
+  }
+  .subtitle{
+    margin-bottom:16px;
+  }
+  .field{
+    margin-bottom:12px;
+  }
+}
 </style>
 </head>
 
@@ -136,7 +216,6 @@ h1{
       <span>პაროლი</span>
       <input type="password" id="adminPass" placeholder="შეიყვანე პაროლი">
       <div class="eye-btn" onclick="togglePassword()">🙈</div>
-
     </div>
 
     <button class="login-btn">შესვლა</button>
