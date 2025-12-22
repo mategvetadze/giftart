@@ -1,3 +1,5 @@
+let videoFiles = [];
+let receiptFile=null;
 document.addEventListener("DOMContentLoaded", () => {
     
 
@@ -117,8 +119,7 @@ if (index === steps.length-1) {
 
   const first = document.getElementById("firstName");
   const last = document.getElementById("lastName");
-  const age = document.getElementById("age");
-  const receipt = document.getElementById("receiptPhoto");
+  const phone = document.getElementById("phone");
 
   if (!first.value.trim()) {
     showError("გთხოვ მიუთითო სახელი");
@@ -132,19 +133,13 @@ if (index === steps.length-1) {
     return false;
   }
 
-  if (!age.value.trim()) {
-    showError("გთხოვ მიუთითო ასაკი");
-    age.focus();
+  if (!phone.value.trim()) {
+    showError("გთხოვ მიუთითო ტელეფონი");
+    phone.focus();
     return false;
   }
 
-  if (Number(age.value) <= 0 || isNaN(age.value)) {
-    showError("გთხოვ მიუთითო სწორი ასაკი");
-    age.focus();
-    return false;
-  }
-
-  if (!receipt.files.length) {
+  if (!receiptFile) {
     showError("გთხოვ ატვირთო გადახდის ქვითარი");
     return false;
   }
@@ -192,33 +187,62 @@ function showError(message, containerSelector = null) {
     document.querySelectorAll(".error-message").forEach(e => e.remove());
   }
 
-const finishBtn = document.getElementById("finishBtn");
-const modal = document.getElementById("modal");
-const modalOk = document.getElementById("modalOk");
-
-finishBtn.addEventListener("click", () => {
-  if (!validateCurrentStep()) return;
-
-  modal.classList.remove("hidden");
-  modal.setAttribute("aria-hidden", "false");
-});
-
-modalOk.addEventListener("click", () => {
-  modal.classList.add("hidden");
-  modal.setAttribute("aria-hidden", "true");
-  window.location.href = "home.html";
-});
 
 
 });
 
+setTimeout(() => {
+  const finishBtn = document.getElementById("finishBtn");
+  const modal = document.getElementById("modal");
+  const modalOk = document.getElementById("modalOk");
 
+  console.log("Finish button found:", finishBtn);
+
+  if (finishBtn) {
+    finishBtn.onclick = async () => {
+      console.log("Finish button clicked!");
+
+      const first = document.getElementById("firstName");
+      const last = document.getElementById("lastName");
+      const phone = document.getElementById("phone");
+
+      if (!first?.value.trim() || !last?.value.trim() || !phone?.value.trim()) {
+        alert("გთხოვ შეავსო ყველა ველი");
+        return;
+      }
+
+      if (!receiptFile) {
+        alert("გთხოვ ატვირთო ქვითარი");
+        return;
+      }
+
+      try {
+        console.log("Saving order...");
+        await saveVideoOrder();
+        console.log("Order saved!");
+        
+        modal.classList.remove("hidden");
+        modal.setAttribute("aria-hidden", "false");
+      } catch (error) {
+        console.error("Error:", error);
+        alert("შეცდომა!");
+      }
+    };
+  }
+
+  if (modalOk) {
+    modalOk.onclick = () => {
+      modal.classList.add("hidden");
+      window.location.href = "home.html";
+    };
+  }
+}, 500);
 const receiptInput = document.getElementById("receiptPhoto");
 
 
 const receiptPreview = document.getElementById("receiptPreview");
 const receiptHint = document.getElementById("receiptHint");
-let receiptFile = null;
+
 if (receiptInput) {
   receiptInput.addEventListener("change", () => {
     receiptPreview.innerHTML = "";
@@ -272,7 +296,7 @@ const videoInput = document.getElementById("videoPhotos");
 const videoHint = document.getElementById("videoPhotosHint");
 const videoPreview = document.getElementById("videoPhotosPreview");
 
-let videoFiles = [];
+
 
 if (videoInput) {
   videoInput.addEventListener("change", () => {
@@ -363,4 +387,48 @@ function updateVideoPreview() {
   }
 
   return true;
+}
+
+// Helper function to convert File to base64
+function fileToBase64(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = error => reject(error);
+    reader.readAsDataURL(file);
+  });
+}
+
+// SAVE VIDEO ORDER TO LOCALSTORAGE
+async function saveVideoOrder() {
+  console.log("saveVideoOrder called!");
+  
+  const orders = JSON.parse(localStorage.getItem("videoOrders") || "[]");
+
+  const method = document.querySelector('input[name="deliveryMethod"]:checked');
+  const extra = method?.closest(".delivery-card")?.querySelector(".delivery-extra")?.value || "";
+
+  const receiptBase64 = receiptFile ? await fileToBase64(receiptFile) : null;
+  const photoPromises = videoFiles.map(file => fileToBase64(file));
+  const photosBase64 = await Promise.all(photoPromises);
+
+  const order = {
+    id: Date.now(),
+    type: "Video Story",
+    deliveryMethod: method?.value || "",
+    deliveryExtra: extra,
+    photoCount: videoFiles.length,
+    photos: photosBase64,
+    videoText: document.getElementById("videoText")?.value.trim() || "",
+    musicUrl: document.getElementById("musicUrl")?.value.trim() || "",
+    firstName: document.getElementById("firstName").value.trim(),
+    lastName: document.getElementById("lastName").value.trim(),
+    phone: document.getElementById("phone").value.trim(),
+    paymentNote: document.getElementById("paymentNote")?.value.trim() || "",
+    receiptPhoto: receiptBase64
+  };
+
+  orders.push(order);
+  localStorage.setItem("videoOrders", JSON.stringify(orders));
+  console.log("Order saved successfully!");
 }

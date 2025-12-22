@@ -983,4 +983,3 @@ function maybeShowOpt4Delivery() {
 }
 
 peopleCount.addEventListener("change", maybeShowOpt4Delivery);
-
