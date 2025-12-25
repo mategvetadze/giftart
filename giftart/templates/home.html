@@ -1,12 +1,11 @@
-{% load static %}
 <!DOCTYPE html>
 <html lang="ka">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Giftart.ge</title>
-  <link rel="stylesheet" href="{% static 'css/style.css' %}" />
-
+  <link rel="stylesheet" href="style.css" />
+  
   <style>
   .order-btn {
   display: inline-block;
@@ -232,17 +231,17 @@
  <div class="page">
 <header class="header">
   <div class="container nav">
-    <a href="{% url 'home' %}" class="logo">
+    <a href="home.html" class="logo">
   Giftart<span>.ge</span>
 </a>
 
     <nav>
-      <a class="active" href="{% url 'home' %}">მთავარი</a>
-      <a href="{% url 'shop' %}">გალერეა</a>
-      <a href="{% url 'order' %}">შეუკვეთე</a>
-      <a href="{% url 'aboutus' %}">ჩვენ შესახებ</a>
-      <a href="{% url 'contact' %}">კონტაქტი</a>
-
+      <a class="active" href="home.html">მთავარი</a>
+      <a href="shop.html">გალერეა</a>
+      <a href="order.html">შეუკვეთე</a>
+      <a href="aboutus.html">ჩვენ შესახებ</a>
+      <a href="contact.html">კონტაქტი</a>
+     
     </nav>
   </div>
 </header>
@@ -262,8 +261,8 @@
     </p>
 
     <div class="hero-actions">
-      <a href="{% url 'shop' %}" class="btn primary">მაღაზიის ნახვა</a>
-      <a href="{% url 'order' %}" class="btn outline">შეუკვეთე</a>
+      <a href="shop.html" class="btn primary">მაღაზიის ნახვა</a>
+      <a href="order.html" class="btn outline">შეუკვეთე</a>
     </div>
 
     <div class="hero-stats">
@@ -323,22 +322,22 @@
 
     <div class="product-grid">
       <div class="product">
-        <img src="{% static 'images/gallery2.jpg' %}" />
+        <img src="gallery2.jpg" />
         <h4>გალაკტიონის მთაწმინდის მთვარე</h4>
       </div>
       <div class="product">
   <video
-    src="{% static 'videos/მთაწმინდის მთვარე.mp4' %}"
+    src="მთაწმინდის მთვარე.mp4"
     controls
     preload="metadata"
-    poster="{% static 'images/gala.png' %}"
+    poster="gala.png"
     tabindex="0"
   ></video>
   <h4>მთაწმინდის მთვარე</h4>
 </div>
 
       <div class="product">
-        <img src="{% static 'images/gallery1.jpg' %}" />
+        <img src="gallery1.jpg" />
         <h4>ძაღლი და გოგონა</h4>
       </div>
     </div>
@@ -378,7 +377,7 @@
         <li>🚚 მიწოდება</li>
       </ul>
 
-     <a href="{% url 'order' %}" class="order-btn">დაიწყე შეკვეთა →</a>
+     <a href="order.html" class="order-btn">დაიწყე შეკვეთა →</a>
 
 
     </div>
@@ -425,9 +424,9 @@
     <div class="footer-middle">
       <div class="footer-block">
         <h2>მენიუ</h2>
-        <a href="{% url 'shop' %}">მაღაზია</a>
-        <a href="{% url 'order' %}">შეუკვეთე</a>
-        <a href="{% url 'aboutus' %}">ჩვენ შესახებ</a>
+        <a href="shop.html">მაღაზია</a>
+        <a href="order.html">შეუკვეთე</a>
+        <a href="aboutus.html">ჩვენ შესახებ</a>
       </div>
 
       <div class="footer-block">
@@ -460,11 +459,11 @@
 
 
 </div>
-<script src="{% static 'js/home.js' %}">
-
+<script src="home.js">
+ 
 </script>
-<script src="{% static 'js/page-transition.js' %}">
-
+<script src="page-transition.js">
+ 
 </script>
 </body>
 </html>

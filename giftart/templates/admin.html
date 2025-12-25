@@ -1,115 +1,618 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ka">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Admin Dashboard — Giftart.ge</title>
     <style>
-    .admin-panel{
+body {
+  background:#faf7f4;
+  font-family: Georgia, serif;
+  color:#2a1f1b;
+  margin:0;
+  padding:0;
+}
+
+.admin-panel{
   max-width:1100px;
-  margin:80px auto;
+  margin:70px auto 100px;
   padding:20px;
 }
 
 .admin-panel h2{
   margin-bottom:25px;
   color:#6a4a3a;
+  text-align:center;
+  font-size:28px;
+  letter-spacing:0.5px;
 }
 
 .orders-table{
   width:100%;
-  border-collapse:collapse;
+  border-collapse:separate;
+  border-spacing:0;
   background:#fff;
-  border-radius:10px;
+  border-radius:18px;
   overflow:hidden;
+  box-shadow:0 20px 40px rgba(195,138,98,0.18);
 }
 
 .orders-table th{
   background:#c38a62;
   color:#fff;
   text-align:left;
-  padding:12px 10px;
+  padding:14px 14px;
+  font-size:15px;
+  letter-spacing:0.3px;
 }
 
 .orders-table td{
-  padding:12px 10px;
-  border-bottom:1px solid #eee;
+  padding:14px 12px;
+  border-bottom:1px solid #efe3d9;
+  vertical-align:top;
+  color:#2a1f1b;
+  font-size:14px;
 }
 
-.orders-table tr:hover{
-  background:#faf2eb;
+.orders-table tr:last-child td{
+  border-bottom:none;
+}
+
+.orders-table tbody tr:hover{
+  background:#fff6ef;
+  transition:.2s ease;
 }
 
 .delete-btn{
-  background:#c45353;
+  background:#c38a62;
   color:#fff;
   border:none;
-  padding:8px 12px;
-  border-radius:6px;
+  padding:9px 14px;
+  border-radius:12px;
   cursor:pointer;
+  font-size:13px;
+  box-shadow:0 8px 16px rgba(195,138,98,0.35);
+  transition:.25s ease;
+  white-space:nowrap;
+  margin:4px 0;
 }
 
 .delete-btn:hover{
-  background:#a83c3c;
+  background:#b57a55;
+  transform:translateY(-1px);
+  box-shadow:0 12px 24px rgba(195,138,98,0.45);
 }
+
+.people-info {
+  background: #fff6ef;
+  padding: 10px;
+  border-radius: 8px;
+  margin: 8px 0;
+  font-size: 13px;
+}
+
+.person-item {
+  padding: 6px 0;
+  border-bottom: 1px dashed #e6ddd5;
+}
+
+.person-item:last-child {
+  border-bottom: none;
+}
+
+.person-item strong {
+  color: #6a4a3a;
+}
+
+.photo-gallery {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 8px;
+  min-height: 70px;
+}
+
+.photo-thumb {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 8px;
+  cursor: pointer;
+  border: 2px solid #e6ddd5;
+  transition: .2s ease;
+}
+
+.photo-thumb:hover {
+  border-color: #c38a62;
+  transform: scale(1.05);
+}
+
+.video-photos-gallery {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 8px;
+  min-height: 90px;
+}
+
+.video-photo-thumb {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 8px;
+  cursor: pointer;
+  border: 2px solid #e6ddd5;
+  transition: .2s ease;
+}
+
+.video-photo-thumb:hover {
+  border-color: #c38a62;
+  transform: scale(1.05);
+}
+
 .image-viewer{
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,.8);
+  background: rgba(0,0,0,.75);
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 9999;
+  animation: fade .25s ease;
+  padding:20px;
+}
+
+@keyframes fade{
+  from{opacity:0}
+  to{opacity:1}
 }
 
 .image-viewer img{
   max-width: 92%;
-  max-height: 92%;
-  border-radius: 14px;
-  box-shadow: 0 0 30px rgba(0,0,0,.5);
+  max-height: 88%;
+  border-radius: 20px;
+  box-shadow: 0 20px 40px rgba(0,0,0,.45);
+  object-fit:contain;
 }
 
 .close-view{
   position: absolute;
-  top: 18px;
-  right: 24px;
-  font-size: 34px;
+  top: 22px;
+  right: 26px;
+  font-size: 30px;
   color: white;
   cursor: pointer;
   font-family: Arial;
   background: rgba(0,0,0,.5);
-  width: 40px;
-  height: 40px;
+  width: 44px;
+  height: 44px;
   border-radius: 50%;
   text-align:center;
-  line-height:40px;
+  line-height:44px;
+  transition:.2s ease;
 }
 
+.close-view:hover{
+  background:#c38a62;
+}
+
+.confirm-overlay{
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.6);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 99999;
+  animation: fade .25s ease;
+}
+
+.hidden{
+  display:none;
+}
+
+.confirm-box{
+  background:#fff;
+  border-radius:20px;
+  max-width:420px;
+  width:95%;
+  padding:22px 20px;
+  box-shadow:0 20px 40px rgba(0,0,0,.2);
+  text-align:center;
+}
+
+.confirm-box h3{
+  margin-top:0;
+  color:#6a4a3a;
+}
+
+.confirm-box p{
+  color:#4b3a30;
+  line-height:1.6;
+}
+
+.confirm-actions{
+  margin-top:20px;
+  display:flex;
+  justify-content:space-between;
+  gap:12px;
+}
+
+.cancel-btn{
+  background:#e6ddd5;
+  border:none;
+  padding:10px 14px;
+  width:50%;
+  border-radius:12px;
+  cursor:pointer;
+  font-size:14px;
+}
+
+.danger{
+  background:#b75a3a !important;
+}
+
+.cancel-btn:hover{
+  background:#d8ccc1;
+}
+
+.danger:hover{
+  background:#a14a2c !important;
+}
+
+@media(max-width:767px){
+  .orders-table, .orders-table thead, .orders-table tbody, .orders-table tr, .orders-table th, .orders-table td{
+    display:block;
+    width:100%;
+  }
+
+  .orders-table thead{
+    display:none;
+  }
+
+  .orders-table tr{
+    background:#fff;
+    margin-bottom:16px;
+    border-radius:18px;
+    padding:16px;
+    box-shadow:0 16px 32px rgba(195,138,98,0.12);
+    border:1px solid #e6ddd5;
+  }
+
+  .orders-table td{
+    border:none;
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-start;
+    gap:10px;
+    padding:10px 0;
+    border-bottom:1px dashed #e6ddd5;
+    font-size:13px;
+  }
+
+  .orders-table td:last-child{
+    border-bottom:none;
+    justify-content:center;
+    padding-top:16px;
+  }
+
+  .orders-table td:before{
+    content:attr(data-label);
+    font-weight:bold;
+    color:#6a4a3a;
+    min-width:90px;
+    flex-shrink:0;
+    font-size:13px;
+  }
+  
+  .orders-table td:last-child:before{
+    display:none;
+  }
+  
+  .delete-btn{
+    width:100%;
+    padding:11px;
+    font-size:14px;
+  }
+}
 </style>
 </head>
 <body>
-    <section class="admin-panel">
-  <h2>შეკვეთების სია</h2>
+  <div id="confirmModal" class="confirm-overlay hidden">
+    <div class="confirm-box">
+      <h3>შეკვეთის წაშლა</h3>
+      <p>დარწმუნებული ხარ, რომ გინდა ამ შეკვეთის წაშლა? 🥺<br>ამ ქმედების დაბრუნება შეუძლებელია.</p>
+      <div class="confirm-actions">
+        <button id="cancelDelete" class="cancel-btn">გაუქმება</button>
+        <button id="confirmDelete" class="delete-btn danger">წაშალე</button>
+      </div>
+    </div>
+  </div>
 
-  <table class="orders-table">
-    <thead>
-      <tr>
-        <th>ID</th>
-        <th>შეკვეთის ტიპი</th>
-        <th>მისამართი/გაგზავნის მეთოდი</th>
-        <th>გადახდა</th>
-        <th>წაშლა ფრთხილად!!!!</th>
-      </tr>
-    </thead>
+  <section class="admin-panel">
+    <h2>შეკვეთების სია</h2>
+    <table class="orders-table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>შეკვეთის ტიპი</th>
+          <th>დეტალები</th>
+          <th>მისამართი/გაგზავნის მეთოდი</th>
+          <th>გადახდა</th>
+          <th>წაშლა</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </section>
 
-    <tbody>
-     
-    </tbody>
-  </table>
-</section>
 <script>
 
+const DB_NAME = 'GiftartDB';
+const DB_VERSION = 1;
+const STORE_NAME = 'photos';
 
+function openDB() {
+  return new Promise((resolve, reject) => {
+    const request = indexedDB.open(DB_NAME, DB_VERSION);
+    request.onerror = () => reject(request.error);
+    request.onsuccess = () => resolve(request.result);
+    request.onupgradeneeded = (event) => {
+      const db = event.target.result;
+      if (!db.objectStoreNames.contains(STORE_NAME)) {
+        db.createObjectStore(STORE_NAME, { keyPath: 'id' });
+      }
+    };
+  });
+}
+
+async function getPhotoFromDB(photoId) {
+  const db = await openDB();
+  return new Promise((resolve, reject) => {
+    const transaction = db.transaction([STORE_NAME], 'readonly');
+    const store = transaction.objectStore(STORE_NAME);
+    const request = store.get(photoId);
+    request.onsuccess = () => resolve(request.result);
+    request.onerror = () => reject(request.error);
+  });
+}
+
+document.addEventListener("DOMContentLoaded", async () => {
+  const tableBody = document.querySelector("tbody");
+
+  let allOrders = [];
+
+ try {
+  const photo = JSON.parse(localStorage.getItem("photoOrders") || "[]");
+  const video = JSON.parse(localStorage.getItem("videoOrders") || "[]");
+  const greeting = JSON.parse(localStorage.getItem("greetingOrders") || "[]");
+  allOrders = [...photo, ...video, ...greeting];
+}catch {
+    allOrders = [];
+  }
+
+  allOrders.sort((a, b) => b.id - a.id);
+
+  if(allOrders.length === 0){
+    tableBody.innerHTML = `
+      <tr>
+        <td colspan="6" style="text-align:center;padding:30px;">
+          შეკვეთები ჯერ არ არის 🙂
+        </td>
+      </tr>`;
+    return;
+  }
+
+  allOrders.forEach((order, index) => {
+    const tr = document.createElement("tr");
+    const serialNumber = allOrders.length - index;
+
+    const typeText = order.type === "Video Story" ? "🎥 ვიდეო" : order.type === "Greeting Video" ? "🎉 მილოცვა" : "📷 ფოტო";
+
+    let detailsHtml = "";
+    
+    if (order.frameSize || order.frameType) {
+      detailsHtml += `
+        ${order.frameSize ? `ზომა: <b>${order.frameSize}</b><br>` : ""}
+        ${order.frameType ? `ფერი: <b>${order.frameType}</b><br>` : ""}
+        ${order.customColor ? `🔹 სასურველი ფერი: ${order.customColor}<br>` : ""}
+      `;
+    }
+
+
+    if (order.type === "Photo Order" && order.photoIds && order.photoIds.length > 0) {
+      detailsHtml += `<br><strong>📸 შეკვეთილი ფოტო:</strong><br>`;
+      detailsHtml += `<div class="photo-gallery" id="photo-gallery-${order.id}">იტვირთება...</div>`;
+    }
+    
+
+    if (order.type === "Greeting Video" && order.people && order.people.length > 0) {
+      detailsHtml += `<div class="people-info">`;
+      detailsHtml += `<strong>👥 ადამიანების რაოდენობა:</strong> ${order.peopleCount}<br><br>`;
+      
+      order.people.forEach((person, idx) => {
+        detailsHtml += `
+          <div class="person-item">
+            <strong>${idx + 1}. ${person.name} ${person.surname}</strong> (${person.age} წ.)<br>
+            <small>${person.about}</small>
+          </div>
+        `;
+      });
+      
+      detailsHtml += `</div>`;
+
+      if (order.photoIds && order.photoIds.length > 0) {
+        detailsHtml += `<br><strong>📸 ფოტოები (${order.photoIds.length}):</strong><br>`;
+        detailsHtml += `<div class="photo-gallery" id="greeting-gallery-${order.id}">იტვირთება...</div>`;
+      }
+    }
+
+    if (order.type === "Video Story") {
+  detailsHtml += `📸 ფოტოების რაოდენობა: ${order.photoCount || 0}<br>`;
+  
+  if (order.videoText) {
+    detailsHtml += `📝 ტექსტი: ${order.videoText}<br>`;
+  }
+  
+  if (order.musicUrl) {
+    detailsHtml += `🎵 მუსიკა: <a href="${order.musicUrl}" target="_blank">YouTube ბმული</a><br>`;
+  }
+      if (order.photoIds && order.photoIds.length > 0) {
+        detailsHtml += `<br><strong>📷 ვიდეოს ფოტოები (${order.photoIds.length}):</strong><br>`;
+        detailsHtml += `<div class="video-photos-gallery" id="video-gallery-${order.id}">იტვირთება...</div>`;
+      }
+    }
+
+    tr.innerHTML = `
+      <td data-label="ID:">${serialNumber}</td>
+      <td data-label="ტიპი:">${typeText}</td>
+      <td data-label="დეტალები:">${detailsHtml || "—"}</td>
+      <td data-label="მისამართი / მიწოდება:">
+        ${order.deliveryMethod ? `მიწოდება: <b>${order.deliveryMethod}</b><br>${order.deliveryExtra || ""}` : order.city ? `ქალაქი: <b>${order.city}</b><br>${order.address}<br>${order.addressNote || ""}` : "—"}
+      </td>
+      <td data-label="გადახდა:">
+        ${order.firstName || ""} ${order.lastName || ""}<br>
+        ☎ ${order.phone || ""}<br>
+        ${order.paymentNote ? "📝 " + order.paymentNote : ""}<br><br>
+        ${order.receiptPhotoId ? `<button class="delete-btn" id="receipt-btn-${order.id}" data-receipt-id="${order.receiptPhotoId}">ქვითრის ნახვა</button>` : "ქვითარი არ არის"}
+      </td>
+      <td>
+        <button class="delete-btn" data-delete="${order.id}">წაშლა</button>
+      </td>
+    `;
+
+    tableBody.appendChild(tr);
+
+
+    (async () => {
+      if (order.type === "Photo Order" && order.photoIds && order.photoIds.length > 0) {
+        try {
+          const photoData = await getPhotoFromDB(order.photoIds[0]);
+          const gallery = document.getElementById(`photo-gallery-${order.id}`);
+          if (photoData && photoData.data && gallery) {
+            gallery.innerHTML = `<img src="${photoData.data}" class="photo-thumb" data-view="${photoData.data}" alt="Photo Order">`;
+          }
+        } catch (err) {
+          console.error("Failed to load photo:", err);
+          const gallery = document.getElementById(`photo-gallery-${order.id}`);
+          if (gallery) gallery.innerHTML = "ფოტო ვერ აიტვირთა";
+        }
+      }
+
+
+      if (order.type === "Greeting Video" && order.photoIds && order.photoIds.length > 0) {
+        try {
+          const gallery = document.getElementById(`greeting-gallery-${order.id}`);
+          if (gallery) {
+            gallery.innerHTML = "";
+            for (const photoId of order.photoIds) {
+              const photoData = await getPhotoFromDB(photoId);
+              if (photoData && photoData.data) {
+                const img = document.createElement('img');
+                img.src = photoData.data;
+                img.className = 'photo-thumb';
+                img.setAttribute('data-view', photoData.data);
+                gallery.appendChild(img);
+              }
+            }
+          }
+        } catch (err) {
+          console.error("Failed to load greeting photos:", err);
+        }
+      }
+
+
+      if (order.type === "Video Story" && order.photoIds && order.photoIds.length > 0) {
+        try {
+          const gallery = document.getElementById(`video-gallery-${order.id}`);
+          if (gallery) {
+            gallery.innerHTML = "";
+            for (const photoId of order.photoIds) {
+              const photoData = await getPhotoFromDB(photoId);
+              if (photoData && photoData.data) {
+                const img = document.createElement('img');
+                img.src = photoData.data;
+                img.className = 'video-photo-thumb';
+                img.setAttribute('data-view', photoData.data);
+                gallery.appendChild(img);
+              }
+            }
+          }
+        } catch (err) {
+          console.error("Failed to load video photos:", err);
+        }
+      }
+
+
+      if (order.receiptPhotoId) {
+        try {
+          const receiptData = await getPhotoFromDB(order.receiptPhotoId);
+          const btn = document.getElementById(`receipt-btn-${order.id}`);
+          if (receiptData && receiptData.data && btn) {
+            btn.setAttribute('data-view', receiptData.data);
+          }
+        } catch (err) {
+          console.error("Failed to load receipt:", err);
+        }
+      }
+    })();
+  });
+
+
+  document.addEventListener("click", (e) => {
+    const view = e.target.closest("[data-view]");
+    if(view){
+      const src = view.dataset.view;
+      const viewer = document.createElement("div");
+      viewer.className = "image-viewer";
+      viewer.innerHTML = `
+        <div class="close-view">×</div>
+        <img src="${src}" alt="სურათი">
+      `;
+      document.body.appendChild(viewer);
+      viewer.addEventListener("click", e => {
+        if(e.target.classList.contains("close-view") || e.target === viewer){
+          viewer.remove();
+        }
+      });
+    }
+  });
+
+
+  let deleteId = null;
+
+  document.addEventListener("click", (e) => {
+    const del = e.target.closest("[data-delete]");
+    if(del){
+      deleteId = Number(del.dataset.delete);
+      document.getElementById("confirmModal").classList.remove("hidden");
+    }
+  });
+
+  document.getElementById("cancelDelete").onclick = () => {
+    deleteId = null;
+    document.getElementById("confirmModal").classList.add("hidden");
+  };
+
+  document.getElementById("confirmDelete").onclick = () => {
+  if(deleteId === null) return;
+
+  let photo = JSON.parse(localStorage.getItem("photoOrders") || "[]");
+  let video = JSON.parse(localStorage.getItem("videoOrders") || "[]");
+  let greeting = JSON.parse(localStorage.getItem("greetingOrders") || "[]");
+
+  photo = photo.filter(o => o.id !== deleteId);
+  video = video.filter(o => o.id !== deleteId);
+  greeting = greeting.filter(o => o.id !== deleteId);
+
+  localStorage.setItem("photoOrders", JSON.stringify(photo));
+  localStorage.setItem("videoOrders", JSON.stringify(video));
+  localStorage.setItem("greetingOrders", JSON.stringify(greeting));
+
+  location.reload();
+};
+});
 </script>
 
 </body>

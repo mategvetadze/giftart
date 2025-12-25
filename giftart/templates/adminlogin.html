@@ -1,4 +1,3 @@
-{% load static %}
 <!DOCTYPE html>
 <html lang="ka">
 <head>
@@ -206,17 +205,16 @@ h1{
 
   <div class="error" id="errorMsg">გთხოვ შეავსო ყველა ველი</div>
 
-  <form action="{% url 'admin_login' %}" method="post" onsubmit="return validateAdmin()">
-    {% csrf_token %}
+  <form onsubmit="return validateAdmin()">
 
     <div class="field">
       <span>მომხმარებელი</span>
-      <input type="text" id="adminUser" name="username" placeholder="მომხმარებლის სახელი">
+      <input type="text" id="adminUser" placeholder="მომხმარებლის სახელი">
     </div>
 
     <div class="field">
       <span>პაროლი</span>
-      <input type="password" id="adminPass" name="password" placeholder="შეიყვანე პაროლი">
+      <input type="password" id="adminPass" placeholder="შეიყვანე პაროლი">
       <div class="eye-btn" onclick="togglePassword()">🙈</div>
     </div>
 
@@ -249,7 +247,7 @@ function validateAdmin(){
   }
 
   error.style.display = "none";
-  window.location.href = "{% url 'admin_dashboard' %}";
+  window.location.href = "admindashboard.html";
   return false;
 }
 </script>
