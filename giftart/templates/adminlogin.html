@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="ka">
 <head>
@@ -247,7 +248,7 @@ function validateAdmin(){
   }
 
   error.style.display = "none";
-  window.location.href = "admindashboard.html";
+  window.location.href = "{% url 'admin_dashboard' %}";
   return false;
 }
 </script>

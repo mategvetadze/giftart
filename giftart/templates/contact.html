@@ -1,10 +1,11 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="ka">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Contact – Giftart.ge</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
   <style>
    
 
@@ -15,17 +16,17 @@
   <div class="page">
 <header class="header">
   <div class="container nav">
-    <a href="home.html" class="logo">
+    <a href="{% url 'home' %}" class="logo">
   Giftart<span>.ge</span>
 </a>
 
     <nav>
-      <a  href="home.html">მთავარი</a>
-      <a href="shop.html">გალერეა</a>
-      <a href="order.html">შეუკვეთე</a>
-      <a href="aboutus.html">ჩვენ შესახებ</a>
-      <a class="active" href="contact.html">კონტაქტი</a>
-      
+      <a  href="{% url 'home' %}">მთავარი</a>
+      <a href="{% url 'shop' %}">გალერეა</a>
+      <a href="{% url 'order' %}">შეუკვეთე</a>
+      <a href="{% url 'aboutus' %}">ჩვენ შესახებ</a>
+      <a class="active" href="{% url 'contact' %}">კონტაქტი</a>
+
     </nav>
   </div>
 </header>
@@ -129,7 +130,7 @@
 
 </section>
 </div>
-<script src="page-transition.js"></script>
+<script src="{% static 'js/page-transition.js' %}"></script>
 
 </body>
 </html>

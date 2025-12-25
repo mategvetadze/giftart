@@ -1,10 +1,11 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="ka">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>შეუკვეთე — Giftart.ge</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
   <style>
   *{ box-sizing:border-box; }
 body{
@@ -468,17 +469,17 @@ input[type="checkbox"] {
   <div class="page">
   <header class="header">
   <div class="container nav">
-    <a href="home.html" class="logo">
+    <a href="{% url 'home' %}" class="logo">
   Giftart<span>.ge</span>
 </a>
 
     <nav>
-      <a  href="home.html">მთავარი</a>
-      <a href="shop.html">გალერეა</a>
-      <a class="active" href="order.html">შეუკვეთე</a>
-      <a href="aboutus.html">ჩვენ შესახებ</a>
-      <a href="contact.html">კონტაქტი</a>
-      
+      <a  href="{% url 'home' %}">მთავარი</a>
+      <a href="{% url 'shop' %}">გალერეა</a>
+      <a class="active" href="{% url 'order' %}">შეუკვეთე</a>
+      <a href="{% url 'aboutus' %}">ჩვენ შესახებ</a>
+      <a href="{% url 'contact' %}">კონტაქტი</a>
+
     </nav>
   </div>
 </header>
@@ -709,9 +710,9 @@ input[type="checkbox"] {
     <div class="footer-middle">
       <div class="footer-block">
         <h2>მენიუ</h2>
-        <a href="shop.html">მაღაზია</a>
-        <a href="order.html">შეუკვეთე</a>
-        <a href="aboutus.html">ჩვენ შესახებ</a>
+        <a href="{% url 'shop' %}">მაღაზია</a>
+        <a href="{% url 'order' %}">შეუკვეთე</a>
+        <a href="{% url 'aboutus' %}">ჩვენ შესახებ</a>
       </div>
 
       <div class="footer-block">
@@ -742,7 +743,7 @@ input[type="checkbox"] {
   </div>
 </footer>
 </div>
-  <script src="order-video.js"></script>
-   <script src="page-transition.js"></script>
+  <script src="{% static 'js/order-video.js' %}"></script>
+   <script src="{% static 'js/page-transition.js' %}"></script>
 </body>
 </html>

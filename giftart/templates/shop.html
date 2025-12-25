@@ -1,10 +1,11 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gallery</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <style>
         .gallery {
   padding: 100px 20px;
@@ -315,17 +316,17 @@
   <div class="page">
     <header class="header">
   <div class="container nav">
-    <a href="home.html" class="logo">
+    <a href="{% url 'home' %}" class="logo">
   Giftart<span>.ge</span>
 </a>
 
     <nav>
-      <a  href="home.html">მთავარი</a>
-      <a class="active" href="shop.html">გალერეა</a>
-      <a href="order.html">შეუკვეთე</a>
-      <a href="aboutus.html">ჩვენ შესახებ</a>
-      <a href="contact.html">კონტაქტი</a>
-      
+      <a  href="{% url 'home' %}">მთავარი</a>
+      <a class="active" href="{% url 'shop' %}">გალერეა</a>
+      <a href="{% url 'order' %}">შეუკვეთე</a>
+      <a href="{% url 'aboutus' %}">ჩვენ შესახებ</a>
+      <a href="{% url 'contact' %}">კონტაქტი</a>
+
     </nav>
   </div>
 </header>
@@ -349,7 +350,7 @@
 
   <div class="gallery-item product-card" data-type="photo">
     <div class="product-image">
-      <img src="gallery1.jpg" loading="lazy">
+      <img src="{% static 'images/gallery1.jpg' %}" loading="lazy">
     </div>
     <div class="product-info">
       <h4 class="product-title">გოგონა და ძაღლი</h4>
@@ -370,7 +371,7 @@
 
    <div class="gallery-item product-card" data-type="photo">
     <div class="product-image">
-      <img src="gallery2.jpg" loading="lazy">
+      <img src="{% static 'images/gallery2.jpg' %}" loading="lazy">
     </div>
     <div class="product-info">
       <h4 class="product-title">გალაკტიონის მთაწმინდის მთვარე</h4>
@@ -390,7 +391,7 @@
 
  <div class="gallery-item product-card" data-type="photo">
     <div class="product-image">
-      <img src="gallery3.jpg" loading="lazy">
+      <img src="{% static 'images/gallery3.jpg' %}" loading="lazy">
     </div>
     <div class="product-info">
       <h4 class="product-title">აფხაზეთი</h4>
@@ -409,13 +410,13 @@
 
    <div class="gallery-item product-card" data-type="photo">
     <div class="product-image">
-      <img src="gallery4.jpg" loading="lazy">
+      <img src="{% static 'images/gallery4.jpg' %}" loading="lazy">
     </div>
     <div class="product-info">
       <h4 class="product-title">რაჭა-ლეჩხუმი</h4>
       <div class="product-bottom">
   <span class="product-price">₾49</span>
-  <a href="order-photo.html">
+  <a href="{% url 'order_photo' %}">
   <button class="order-button">შეკვეთა</button>
 </a>
 
@@ -426,13 +427,13 @@
 
   <div class="gallery-item product-card" data-type="photo">
     <div class="product-image">
-      <img src="gallery5.jpg" loading="lazy">
+      <img src="{% static 'images/gallery5.jpg' %}" loading="lazy">
     </div>
     <div class="product-info">
       <h4 class="product-title">მარგარიტა დეიდა</h4>
       <div class="product-bottom">
   <span class="product-price">₾49</span>
-  <a href="order-photo.html">
+  <a href="{% url 'order_photo' %}">
   <button class="order-button">შეკვეთა</button>
 </a>
 
@@ -444,13 +445,13 @@
   </div>
   <div class="gallery-item product-card" data-type="photo">
     <div class="product-image">
-      <img src="gallery6.jpg" loading="lazy">
+      <img src="{% static 'images/gallery6.jpg' %}" loading="lazy">
     </div>
     <div class="product-info">
       <h4 class="product-title"> ვოლფგანგ ამადეუს მოცარტი</h4>
       <div class="product-bottom">
   <span class="product-price">₾49</span>
-  <a href="order-photo.html">
+  <a href="{% url 'order_photo' %}">
   <button class="order-button">შეკვეთა</button>
 </a>
 
@@ -461,13 +462,13 @@
   </div>
   <div class="gallery-item product-card" data-type="photo">
     <div class="product-image">
-      <img src="gallery7.jpg" loading="lazy">
+      <img src="{% static 'images/gallery7.jpg' %}" loading="lazy">
     </div>
     <div class="product-info">
       <h4 class="product-title">გოგონა და ძაღლი</h4>
       <div class="product-bottom">
   <span class="product-price">₾49</span>
- <a href="order-photo.html">
+ <a href="{% url 'order_photo' %}">
   <button class="order-button">შეკვეთა</button>
 </a>
 
@@ -479,13 +480,13 @@
   </div>
   <div class="gallery-item product-card" data-type="photo">
     <div class="product-image">
-      <img src="gallery8.jpg" loading="lazy">
+      <img src="{% static 'images/gallery8.jpg' %}" loading="lazy">
     </div>
     <div class="product-info">
       <h4 class="product-title">ცხელი ძაღლი - კალდუნა</h4>
       <div class="product-bottom">
   <span class="product-price">₾49</span>
-  <a href="order-photo.html">
+  <a href="{% url 'order_photo' %}">
   <button class="order-button">შეკვეთა</button>
 </a>
 
@@ -500,10 +501,10 @@
     <div class="gallery-item product-card" data-type="video">
     <div class="product-image">
   <video
-    src="ისტორია ძაღლზე სახელად ბალუ.mp4"
+    src="{% static 'videos/ისტორია ძაღლზე სახელად ბალუ.mp4' %}"
     controls
     preload="metadata"
-    poster="balu.png"
+    poster="{% static 'images/balu.png' %}"
   ></video>
 </div>
 
@@ -519,7 +520,7 @@
 
   <div class="product-bottom">
     <span class="product-price">₾150 (⏱ 30 წამი)</span>
-    <a href="order-video.html">
+    <a href="{% url 'order_video' %}">
   <button class="order-button">შეკვეთა</button>
 </a>
   </div>
@@ -532,10 +533,10 @@
     <div class="gallery-item product-card" data-type="video">
    <div class="product-image">
   <video
-    src="მთაწმინდის მთვარე.mp4"
+    src="{% static 'videos/მთაწმინდის მთვარე.mp4' %}"
     controls
     preload="metadata"
-    poster="gala.png"
+    poster="{% static 'images/gala.png' %}"
   ></video>
 </div>
 
@@ -551,7 +552,7 @@
 
   <div class="product-bottom">
     <span class="product-price">₾150 (⏱ 30 წამი)</span>
-    <a href="order-video.html">
+    <a href="{% url 'order_video' %}">
   <button class="order-button">შეკვეთა</button>
 </a>
   </div>
@@ -563,10 +564,10 @@
    <div class="gallery-item product-card" data-type="video">
    <div class="product-image">
   <video
-    src="50 ყველაზე ცნობილი კლასიკური ნაწარმოები - პირველი ნაწილი.mp4"
+    src="{% static 'videos/50 ყველაზე ცნობილი კლასიკური ნაწარმოები - პირველი ნაწილი.mp4' %}"
     controls
     preload="metadata"
-    poster="betho.png"
+    poster="{% static 'images/betho.png' %}"
   ></video>
 </div>
 
@@ -582,7 +583,7 @@
 
   <div class="product-bottom">
     <span class="product-price">₾150 (⏱ 30 წამი)</span>
-    <a href="order-video.html">
+    <a href="{% url 'order_video' %}">
   <button class="order-button">შეკვეთა</button>
 </a>
   </div>
@@ -595,10 +596,10 @@
    <div class="gallery-item product-card" data-type="video">
    <div class="product-image">
   <video
-    src="ვარდები.mp4"
+    src="{% static 'videos/ვარდები.mp4' %}"
     controls
     preload="metadata"
-    poster="vardi.png"
+    poster="{% static 'images/vardi.png' %}"
   ></video>
 </div>
 
@@ -614,7 +615,7 @@
 
   <div class="product-bottom">
     <span class="product-price">₾150 (⏱ 30 წამი)</span>
-     <a href="order-video.html">
+     <a href="{% url 'order_video' %}">
   <button class="order-button">შეკვეთა</button>
 </a>
   </div>
@@ -636,9 +637,9 @@
     <div class="footer-middle">
       <div class="footer-block">
         <h2>მენიუ</h2>
-        <a href="shop.html">მაღაზია</a>
-        <a href="order.html">შეუკვეთე</a>
-        <a href="aboutus.html">ჩვენ შესახებ</a>
+        <a href="{% url 'shop' %}">მაღაზია</a>
+        <a href="{% url 'order' %}">შეუკვეთე</a>
+        <a href="{% url 'aboutus' %}">ჩვენ შესახებ</a>
       </div>
 
       <div class="footer-block">
@@ -669,10 +670,10 @@
   </div>
 </footer>
 </div>
-<script src="shop.js">
+<script src="{% static 'js/shop.js' %}">
 
 </script>
-<script src="page-transition.js"></script>
+<script src="{% static 'js/page-transition.js' %}"></script>
 
 </body>
 </html>
