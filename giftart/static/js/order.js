@@ -1,4 +1,63 @@
+const DB_NAME = 'GiftartDB';
+const DB_VERSION = 1;
+const STORE_NAME = 'photos';
 
+function openDB() {
+  return new Promise((resolve, reject) => {
+    const request = indexedDB.open(DB_NAME, DB_VERSION);
+    
+    request.onerror = () => reject(request.error);
+    request.onsuccess = () => resolve(request.result);
+    
+    request.onupgradeneeded = (event) => {
+      const db = event.target.result;
+      if (!db.objectStoreNames.contains(STORE_NAME)) {
+        db.createObjectStore(STORE_NAME, { keyPath: 'id' });
+      }
+    };
+  });
+}
+
+async function savePhotoToDB(orderId, file) {
+  const db = await openDB();
+  const base64 = await fileToBase64(file);
+  
+  return new Promise((resolve, reject) => {
+    const transaction = db.transaction([STORE_NAME], 'readwrite');
+    const store = transaction.objectStore(STORE_NAME);
+    const request = store.put({
+      id: `order_${orderId}_${file.name}`,
+      orderId: orderId,
+      fileName: file.name,
+      data: base64,
+      timestamp: Date.now()
+    });
+    
+    request.onsuccess = () => resolve(request.result);
+    request.onerror = () => reject(request.error);
+  });
+}
+
+async function getPhotoFromDB(photoId) {
+  const db = await openDB();
+  
+  return new Promise((resolve, reject) => {
+    const transaction = db.transaction([STORE_NAME], 'readonly');
+    const store = transaction.objectStore(STORE_NAME);
+    const request = store.get(photoId);
+    
+    request.onsuccess = () => resolve(request.result);
+    request.onerror = () => reject(request.error);
+  });
+}
+function fileToBase64(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result); 
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+}
 
 
 
@@ -60,6 +119,48 @@ document.addEventListener("DOMContentLoaded", () => {
   address: document.getElementById("step-address"), 
   payment: document.getElementById("step-payment"),
 };
+function validatePaymentStep() {
+  const firstName = document.getElementById('firstName');
+  const lastName  = document.getElementById('lastName');
+  const phone     = document.getElementById('phone');
+
+
+  if (!firstName.value.trim() || !lastName.value.trim() || !phone.value.trim()) {
+    showError("გთხოვ შეავსო სახელი/გვარი და ტელეფონის ნომერი.", "lastName");
+    return false;
+  }
+
+
+  if (!receiptFile) {
+    document.querySelectorAll('.error-message').forEach(e => e.remove());
+
+    const errorDiv = document.createElement('div');
+    errorDiv.className = 'error-message show';
+    errorDiv.textContent = 'გთხოვ ატვირთო გადახდის ქვითარი 📄';
+
+    const phoneField = document.getElementById('phone');
+    const phoneContainer = phoneField.closest('.field');
+
+    if (phoneContainer) {
+      phoneContainer.parentNode.insertBefore(errorDiv, phoneContainer.nextSibling);
+      errorDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+
+    const uploadBtn = document.querySelector('#step-payment .upload-btn');
+    if (uploadBtn) {
+      uploadBtn.style.borderColor = '#c38a62';
+    }
+
+    setTimeout(() => {
+      errorDiv.remove();
+      if (uploadBtn) uploadBtn.style.borderColor = '';
+    }, 5000);
+
+    return false;
+  }
+
+  return true;
+}
 
 
   const progressFill = document.getElementById("progressFill");
@@ -88,6 +189,9 @@ const cityRegion = document.getElementById("cityRegion");
 
 
   const address = document.getElementById("address");
+  const addressNote = document.getElementById("addressNote");
+const paymentNote = document.getElementById("paymentNote");
+
 
 
   const firstName = document.getElementById("firstName");
@@ -114,7 +218,7 @@ modalOk.addEventListener("click", () => {
 }
 
  function setActiveStep(stepEl) {
-  // HARD reset
+
   document.querySelectorAll(".order-step").forEach(s => {
     s.classList.remove("active");
     s.classList.add("hidden");
@@ -237,10 +341,15 @@ function getTotalSteps() {
 
 
   if (opt === "3") {
-    if (videoFiles.length < 5 || videoFiles.length > 7) {
-      showError("გთხოვ ატვირთო 5-7 ფოტო");
-      return false;
-    }
+   const realVideoFiles =
+  videoFiles && videoFiles.length ? videoFiles :
+  Array.from(document.getElementById("videoPhotos").files || []);
+
+if (realVideoFiles.length < 5 || realVideoFiles.length > 7) {
+  showError("გთხოვ ატვირთო 5-7 ფოტო");
+  return false;
+}
+
     
     const delivery = document.querySelector('input[name="deliveryMethod"]:checked');
     if (!delivery) {
@@ -258,13 +367,14 @@ function getTotalSteps() {
     }
     
     if (delivery.value === "other") {
-      const textarea = delivery.closest(".delivery-card").querySelector(".delivery-extra");
-      if (!textarea.value.trim()) {
-        showError("გთხოვ მიუთითო მიწოდების დეტალები");
-        textarea.focus();
-        return false;
-      }
-    }
+  const textarea = delivery.closest(".delivery-card").querySelector(".delivery-extra");
+  if (textarea && !textarea.value.trim()) {
+    showError("გთხოვ მიუთითო მიწოდების დეტალები");
+    textarea.focus();
+    return false;
+  }
+}
+
     
     return true;
   }
@@ -306,13 +416,14 @@ function getTotalSteps() {
       }
     }
     if (delivery.value === "other") {
-      const textarea = delivery.closest(".delivery-card").querySelector(".delivery-extra");
-      if (!textarea.value.trim()) {
-        showError("გთხოვ მიუთითო მიწოდების დეტალები");
-        textarea.focus();
-        return false;
-      }
-    }
+  const textarea = delivery.closest(".delivery-card").querySelector(".delivery-extra");
+  if (textarea && !textarea.value.trim()) {
+    showError("გთხოვ მიუთითო მიწოდების დეტალები");
+    textarea.focus();
+    return false;
+  }
+}
+
     
     return true;
   }
@@ -365,11 +476,13 @@ if (!receiptFile) {
 
  
 
-  function validatePaymentStep() {
+ function validatePaymentStep() {
+
   if (!firstName.value.trim() || !lastName.value.trim() || !phone.value.trim()) {
     showError("გთხოვ შეავსო სახელი/გვარი და ტელეფონის ნომერი.", "lastName");
     return false;
   }
+
 
   if (!receiptFile) {
     document.querySelectorAll('.error-message').forEach(e => e.remove());
@@ -395,7 +508,6 @@ if (!receiptFile) {
       errorDiv.remove();
       if (uploadBtn) {
         uploadBtn.style.borderColor = '';
-        uploadBtn.style.background = '';
       }
     }, 5000);
     
@@ -404,7 +516,6 @@ if (!receiptFile) {
 
   return true;
 }
-
 
   optionCards.forEach(card => {
     card.addEventListener("click", () => {
@@ -572,16 +683,250 @@ if (active === steps.payment) {
       copyHint.textContent = "ვერ დაკოპირდა. ხელით მონიშნე და დაკოპირე.";
     }
   });
+ function toggleDelivery(stepId) {
+  const delivery = document.getElementById("delivery-section");
+  if (!delivery) return;
 
-  finishBtn?.addEventListener("click", () => {
-    if (!validatePaymentStep()) {
-      return; 
+  if (stepId === "step-opt3") {
+    delivery.classList.remove("hidden");
+    return;
+  }
+
+  if (stepId === "step-opt4") {
+    if (checkOpt4Ready()) {
+      delivery.classList.remove("hidden");
+    } else {
+      delivery.classList.add("hidden");
     }
+    return;
+  }
 
-    modal.classList.remove("hidden");
-    modal.setAttribute("aria-hidden", "false");
+  delivery.classList.add("hidden");
+}
+
+
+function checkOpt4Ready() {
+  const count = Number(peopleCount.value || 0);
+  if (!count) return false;
+
+  for (let i = 1; i <= count; i++) {
+    if (
+      !document.getElementById(`p_name_${i}`)?.value.trim() ||
+      !document.getElementById(`p_surname_${i}`)?.value.trim() ||
+      !document.getElementById(`p_age_${i}`)?.value.trim() ||
+      !document.getElementById(`p_about_${i}`)?.value.trim()
+    ) return false;
+  }
+
+  return greetingFiles.length >= 3;
+}
+
+
+function maybeShowOpt4Delivery() {
+  if (state.selectedOption === "4" && checkOpt4Ready()) {
+    toggleDelivery("step-opt4");
+  }
+}
+
+const greetingInput = document.getElementById("greetingPhotos");
+const greetingPreview = document.getElementById("greetingPhotosPreview");
+const greetingHint = document.getElementById("greetingPhotosHint");
+
+let greetingFiles = [];
+
+if (greetingInput) {
+  greetingInput.addEventListener("change", () => {
+    const files = Array.from(greetingInput.files);
+    greetingFiles.push(...files);
+
+    greetingInput.value = ""; 
+    updateGreetingPreview();
+  });
+}
+
+function updateGreetingPreview() {
+  greetingPreview.innerHTML = "";
+
+  greetingFiles.forEach((file, index) => {
+    const item = document.createElement("div");
+    item.className = "preview-item";
+
+    const img = document.createElement("img");
+    img.src = URL.createObjectURL(file);
+
+    const removeBtn = document.createElement("button");
+    removeBtn.type = "button";
+    removeBtn.textContent = "×";
+
+    removeBtn.onclick = (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      greetingFiles.splice(index, 1);
+      updateGreetingPreview();
+    };
+
+    item.appendChild(img);
+    item.appendChild(removeBtn);
+    greetingPreview.appendChild(item);
   });
 
+  greetingHint.textContent = `${greetingFiles.length} ფოტო არჩეულია`;
+  if (greetingFiles.length < 3) {
+    greetingHint.textContent += " (მინ 3 საჭიროა)";
+  }
+  maybeShowOpt4Delivery();
+
+}
+
+finishBtn?.addEventListener("click", async () => {
+  console.log("Finish button clicked");
+  
+
+  finishBtn.disabled = true;
+  finishBtn.textContent = "იტვირთება..."; 
+  
+  if (!validatePaymentStep()) {
+    console.log("Validation failed");
+    finishBtn.disabled = false;
+    finishBtn.textContent = "დასრულება";
+    return;
+  }
+
+  console.log("Validation passed, saving order...");
+
+  try {
+    const orderId = Date.now();
+
+    let order = {
+      id: orderId,
+      option: state.selectedOption,
+      date: new Date().toLocaleString(),
+      firstName: firstName.value,
+      lastName: lastName.value,
+      phone: phone.value,
+      paymentNote: paymentNote?.value || "",
+      receiptPhoto: receiptFile ? receiptFile.name : "",
+      receiptPhotoId: null
+    };
+
+    if (receiptFile) {
+      await savePhotoToDB(orderId, receiptFile);
+      order.receiptPhotoId = `order_${orderId}_${receiptFile.name}`;
+    }
+
+
+    if (!optionUsesDelivery()) {
+      order.city = cityRegion?.value || "";
+      order.address = address?.value || "";
+      order.addressNote = addressNote?.value || "";
+    }
+
+
+    if (optionUsesDelivery()) {
+      order.deliveryMethod = document.querySelector('input[name="deliveryMethod"]:checked')?.value || "";
+      const deliveryCard = document.querySelector('input[name="deliveryMethod"]:checked')?.closest(".delivery-card");
+      order.deliveryExtra = deliveryCard?.querySelector(".delivery-extra")?.value || "";
+    }
+
+   if (state.selectedOption === "2" || state.selectedOption === 2) {
+  order.type = "Photo Order";
+  order.frameSize = document.querySelector('input[name="frameSize"]:checked')?.value || "";
+  order.frameType = document.querySelector('input[name="frameType"]:checked')?.value || "";
+  
+  const sizeCustom = document.querySelector('input[name="frameSize"]:checked')?.closest(".custom-pill")?.querySelector(".custom-size");
+  const typeCustom = document.querySelector('input[name="frameType"]:checked')?.closest(".custom-pill")?.querySelector(".custom-size");
+  
+  order.customSize = sizeCustom?.value || "";
+  order.customColor = typeCustom?.value || "";
+
+  if (opt2Photo.files[0]) {
+    await savePhotoToDB(orderId, opt2Photo.files[0]);
+    order.photos = [opt2Photo.files[0].name]; 
+    order.photoIds = [`order_${orderId}_${opt2Photo.files[0].name}`]; 
+    order.photoCount = 1;
+  }
+}
+
+    if (state.selectedOption === "3" || state.selectedOption === 3) {
+  order.type = "Video Story";
+  order.photoCount = videoFiles.length;
+  order.musicUrl = musicUrl?.value || "";
+  order.photos = videoFiles.map(f => f.name); 
+  order.photoIds = [];
+
+  for (const file of videoFiles) {
+    await savePhotoToDB(orderId, file);
+    order.photoIds.push(`order_${orderId}_${file.name}`);
+  }
+}
+
+if (state.selectedOption === "4" || state.selectedOption === 4) {
+  order.type = "Greeting Video";
+  const count = Number(peopleCount.value);
+  order.peopleCount = count;
+  order.people = [];
+
+  for (let i = 1; i <= count; i++) {
+    order.people.push({
+      name: document.getElementById(`p_name_${i}`)?.value || "",
+      surname: document.getElementById(`p_surname_${i}`)?.value || "",
+      age: document.getElementById(`p_age_${i}`)?.value || "",
+      about: document.getElementById(`p_about_${i}`)?.value || ""
+    });
+  }
+
+  order.photos = greetingFiles.map(f => f.name);
+  order.photoIds = [];
+  
+
+  for (const file of greetingFiles) {
+    await savePhotoToDB(orderId, file);
+    order.photoIds.push(`order_${orderId}_${file.name}`);
+  }
+}
+
+    
+    try {
+      if (state.selectedOption === "2" || state.selectedOption === 2) {
+        let photoOrders = JSON.parse(localStorage.getItem("photoOrders") || "[]");
+        photoOrders.push(order);
+        localStorage.setItem("photoOrders", JSON.stringify(photoOrders));
+        console.log("Photo order saved");
+      }
+
+      if (state.selectedOption === "3" || state.selectedOption === 3 ||
+          state.selectedOption === "4" || state.selectedOption === 4) {
+        let videoOrders = JSON.parse(localStorage.getItem("videoOrders") || "[]");
+        videoOrders.push(order);
+        localStorage.setItem("videoOrders", JSON.stringify(videoOrders));
+        console.log("Video order saved");
+      }
+    } catch (storageError) {
+      if (storageError.name === 'QuotaExceededError') {
+        alert('მეხსიერება სავსეა. გთხოვთ წაშალოთ ძველი შეკვეთები.');
+        console.error("Storage quota exceeded");
+        return;
+      }
+      throw storageError;
+    }
+
+    console.log("Order saved successfully:", order);
+    console.log("Showing modal...");
+    modal.classList.remove("hidden");
+    modal.setAttribute("aria-hidden", "false");
+    modal.style.display = "flex";
+    console.log("Modal should be visible now");
+    
+  } catch (error) {
+    console.error("Error details:", error);
+    alert("Error: " + error.message);
+    showError("მოხდა შეცდომა შეკვეთის შენახვისას. სცადეთ თავიდან.");
+    
+    
+    finishBtn.disabled = false;
+    finishBtn.textContent = "დასრულება";
+  }
+});
   
  
 if (!initialized) {
@@ -604,52 +949,47 @@ if (!initialized) {
   initialized = true;
 }
 
-
-
-
 });
-
-
 
 const photoInput = document.getElementById("opt2Photo");
 const photoPreview = document.getElementById("photoPreview");
 const opt2Hint = document.getElementById("opt2Hint");
 
-photoInput.addEventListener("change", () => {
-  photoPreview.innerHTML = "";
+if (photoInput) {
+  photoInput.addEventListener("change", () => {
+    photoPreview.innerHTML = "";
 
-  const file = photoInput.files[0];
-  if (!file) {
-    opt2Hint.textContent = "არაფერი არჩეულია";
-    return;
-  }
-
-  opt2Hint.textContent = file.name;
-
-  const reader = new FileReader();
-  reader.onload = e => {
-    const div = document.createElement("div");
-    div.className = "preview-item";
-
-    div.innerHTML = `
-      <img src="${e.target.result}">
-      <button type="button">×</button>
-    `;
-
-    div.querySelector("button").onclick = () => {
-      photoInput.value = "";
-      photoPreview.innerHTML = "";
+    const file = photoInput.files[0];
+    if (!file) {
       opt2Hint.textContent = "არაფერი არჩეულია";
+      return;
+    }
+
+    opt2Hint.textContent = file.name;
+
+    const reader = new FileReader();
+    reader.onload = e => {
+      const div = document.createElement("div");
+      div.className = "preview-item";
+
+      div.innerHTML = `
+        <img src="${e.target.result}">
+        <button type="button">×</button>
+      `;
+
+      div.querySelector("button").onclick = () => {
+        photoInput.value = "";
+        photoPreview.innerHTML = "";
+        opt2Hint.textContent = "არაფერი არჩეულია";
+      };
+
+      photoPreview.appendChild(div);
     };
 
-    photoPreview.appendChild(div);
-  };
-
-  reader.readAsDataURL(file);
-});
-
+    reader.readAsDataURL(file);
+  });
+}
 const receiptInput = document.getElementById("receiptPhoto");
-
 
 const receiptPreview = document.getElementById("receiptPreview");
 const receiptHint = document.getElementById("receiptHint");
@@ -783,62 +1123,6 @@ deliveryRadios.forEach(radio => {
 });
 
 
-
-const greetingInput = document.getElementById("greetingPhotos");
-const greetingPreview = document.getElementById("greetingPhotosPreview");
-const greetingHint = document.getElementById("greetingPhotosHint");
-
-let greetingFiles = [];
-
-if (greetingInput) {
-  greetingInput.addEventListener("change", () => {
-    const files = Array.from(greetingInput.files);
-    greetingFiles.push(...files);
-
-    greetingInput.value = ""; 
-    updateGreetingPreview();
-  });
-}
-
-function updateGreetingPreview() {
-  greetingPreview.innerHTML = "";
-
-  greetingFiles.forEach((file, index) => {
-    const item = document.createElement("div");
-    item.className = "preview-item";
-
-    const img = document.createElement("img");
-    img.src = URL.createObjectURL(file);
-
-    const removeBtn = document.createElement("button");
-    removeBtn.type = "button";
-    removeBtn.textContent = "×";
-
-    removeBtn.onclick = (e) => {
-      e.preventDefault();
-      e.stopPropagation();
-      greetingFiles.splice(index, 1);
-      updateGreetingPreview();
-    };
-
-    item.appendChild(img);
-    item.appendChild(removeBtn);
-    greetingPreview.appendChild(item);
-  });
-
-  greetingHint.textContent = `${greetingFiles.length} ფოტო არჩეულია`;
-  if (greetingFiles.length < 3) {
-    greetingHint.textContent += " (მინ 3 საჭიროა)";
-  }
-  maybeShowOpt4Delivery();
-
-}
-
-
-
-
-
-
 function validateDelivery() {
   const selected = document.querySelector(
     'input[name="deliveryMethod"]:checked'
@@ -862,8 +1146,6 @@ function validateDelivery() {
 
   return true;
 }
-
-
 
 function showDeliveryIfNeeded(option) {
   const deliverySection = document.getElementById("delivery-section");
@@ -922,7 +1204,7 @@ function validateDeliveryForOption(option) {
     }
   }
 
-  if (selected.value === "disk") {
+  if (selected.value === "other") {
     if (!textarea.value.trim()) {
       textarea.classList.add("field-invalid");
       error.textContent = "ეს ველი სავალდებულოა";
@@ -937,49 +1219,5 @@ function validateDeliveryForOption(option) {
 
 
 
-function toggleDelivery(stepId) {
-  const delivery = document.getElementById("delivery-section");
-  if (!delivery) return;
-
-  if (stepId === "step-opt3") {
-    delivery.classList.remove("hidden");
-    return;
-  }
-
-  if (stepId === "step-opt4") {
-    if (checkOpt4Ready()) {
-      delivery.classList.remove("hidden");
-    } else {
-      delivery.classList.add("hidden");
-    }
-    return;
-  }
-
-  delivery.classList.add("hidden");
-}
 
 
-function checkOpt4Ready() {
-  const count = Number(peopleCount.value || 0);
-  if (!count) return false;
-
-  for (let i = 1; i <= count; i++) {
-    if (
-      !document.getElementById(`p_name_${i}`)?.value.trim() ||
-      !document.getElementById(`p_surname_${i}`)?.value.trim() ||
-      !document.getElementById(`p_age_${i}`)?.value.trim() ||
-      !document.getElementById(`p_about_${i}`)?.value.trim()
-    ) return false;
-  }
-
-  return greetingFiles.length >= 3;
-}
-
-
-function maybeShowOpt4Delivery() {
-  if (state.selectedOption === "4" && checkOpt4Ready()) {
-    toggleDelivery("step-opt4");
-  }
-}
-
-peopleCount.addEventListener("change", maybeShowOpt4Delivery);
