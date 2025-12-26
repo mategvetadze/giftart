@@ -8,28 +8,163 @@
   <link rel="stylesheet" href="{% static 'css/style.css' %}">
   <style>
    
+.hamburger {
+  display: none;
+  width: 40px;
+  height: 40px;
+  border: none;
+  background: transparent;
+  padding: 8px;
+  cursor: pointer;
+  flex-shrink: 0;
+  z-index: 1001;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+}
 
+.hamburger span {
+  display: block;
+  width: 24px;
+  height: 2.5px;
+  background: #6a4a3a;
+  border-radius: 3px;
+  transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
+}
+
+.hamburger:hover {
+  transform: scale(1.05);
+}
+
+.hamburger:active {
+  transform: scale(0.95);
+}
+
+.hamburger.is-active span:nth-child(1) {
+  transform: translateY(7.5px) rotate(45deg);
+}
+
+.hamburger.is-active span:nth-child(2) {
+  opacity: 0;
+}
+
+.hamburger.is-active span:nth-child(3) {
+  transform: translateY(-7.5px) rotate(-45deg);
+}
+
+.main-nav {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+}
+
+.nav-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: 998;
+  pointer-events: none;
+}
+
+.nav-overlay.is-active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+@media (max-width: 768px) {
+  .hamburger {
+    display: flex;
+  }
+
+  .nav-overlay {
+    display: block;
+  }
+
+  .main-nav {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 280px;
+    height: 100vh;
+    background: #ffffff;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0;
+    padding: 80px 30px 30px;
+    transform: translateX(100%);
+    transition: transform 0.4s cubic-bezier(0.645, 0.045, 0.355, 1);
+    box-shadow: -10px 0 30px rgba(0, 0, 0, 0.15);
+    z-index: 1000;
+    overflow-y: auto;
+  }
+
+  .main-nav.is-open {
+    transform: translateX(0);
+  }
+
+  .main-nav a {
+    width: 100%;
+    padding: 16px 20px;
+    font-size: 18px;
+    border-radius: 12px;
+    margin: 0 0 8px 0;
+    opacity: 0;
+    transform: translateX(30px);
+    transition: all 0.3s ease;
+  }
+
+  .main-nav.is-open a {
+    animation: slideIn 0.3s ease forwards;
+  }
+
+  .main-nav.is-open a:nth-child(1) { animation-delay: 0.1s; }
+  .main-nav.is-open a:nth-child(2) { animation-delay: 0.15s; }
+  .main-nav.is-open a:nth-child(3) { animation-delay: 0.2s; }
+  .main-nav.is-open a:nth-child(4) { animation-delay: 0.25s; }
+  .main-nav.is-open a:nth-child(5) { animation-delay: 0.3s; }
+
+  .main-nav a:hover {
+    background: rgba(195, 138, 98, 0.1);
+    transform: translateX(5px);
+  }
+
+  @keyframes slideIn {
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+}
 
   </style>
 </head>
 <body>
   <div class="page">
 <header class="header">
-  <div class="container nav">
-    <a href="{% url 'home' %}" class="logo">
-  Giftart<span>.ge</span>
-</a>
+      <div class="container nav">
+        <a href="{% url 'home' %}" class="logo">
+          Giftart<span>.ge</span>
+        </a>
 
-    <nav>
-      <a  href="{% url 'home' %}">მთავარი</a>
-      <a href="{% url 'shop' %}">გალერეა</a>
-      <a href="{% url 'order' %}">შეუკვეთე</a>
-      <a href="{% url 'aboutus' %}">ჩვენ შესახებ</a>
-      <a class="active" href="{% url 'contact' %}">კონტაქტი</a>
+        <button class="hamburger" aria-label="მენიუს გახსნა" aria-expanded="false">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
 
-    </nav>
-  </div>
-</header>
+        <nav class="main-nav">
+          <a href="{% url 'home' %}">მთავარი</a>
+          <a href="{% url 'shop' %}">გალერეა</a>
+          <a href="{% url 'order' %}">შეუკვეთე</a>
+          <a href="{% url 'aboutus' %}">ჩვენ შესახებ</a>
+          <a class="active" href="{% url 'contact' %}">კონტაქტი</a>
+        </nav>
+      </div>
+    </header>
 <section class="contact-page">
 
   <div class="contact-header">
@@ -131,6 +266,51 @@
 </section>
 </div>
 <script src="{% static 'js/page-transition.js' %}"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const hamburger = document.querySelector(".hamburger");
+      const nav = document.querySelector(".main-nav");
+      const overlay = document.querySelector(".nav-overlay");
+      const body = document.body;
 
+      if (!hamburger || !nav) return;
+
+      const toggleMenu = (forceClose = false) => {
+        const isOpen = forceClose ? false : !nav.classList.contains("is-open");
+        
+        nav.classList.toggle("is-open", isOpen);
+        hamburger.classList.toggle("is-active", isOpen);
+        overlay.classList.toggle("is-active", isOpen);
+        hamburger.setAttribute("aria-expanded", isOpen ? "true" : "false");
+        
+        body.style.overflow = isOpen ? "hidden" : "";
+      };
+
+      hamburger.addEventListener("click", () => toggleMenu());
+
+      overlay.addEventListener("click", () => toggleMenu(true));
+
+      nav.addEventListener("click", (e) => {
+        if (e.target.tagName === "A") {
+          toggleMenu(true);
+        }
+      });
+
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape" && nav.classList.contains("is-open")) {
+          toggleMenu(true);
+        }
+      });
+      let resizeTimer;
+      window.addEventListener("resize", () => {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(() => {
+          if (window.innerWidth > 768 && nav.classList.contains("is-open")) {
+            toggleMenu(true);
+          }
+        }, 250);
+      });
+    });
+  </script>
 </body>
 </html>
