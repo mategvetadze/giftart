@@ -97,3 +97,46 @@ const nav = document.getElementById("mobileNav");
 burger.addEventListener("click", () => {
   nav.classList.toggle("show");
 });
+
+document.addEventListener('DOMContentLoaded', () => {
+  const hamburger = document.querySelector('.hamburger');
+  const nav = document.querySelector('.header nav');
+  const overlay = document.querySelector('.nav-overlay');
+  const navLinks = document.querySelectorAll('.header nav a');
+
+  if (hamburger && nav && overlay) {
+    function toggleMenu() {
+      hamburger.classList.toggle('is-active');
+      nav.classList.toggle('is-open');
+      overlay.classList.toggle('is-active');
+      
+      const isOpen = nav.classList.contains('is-open');
+      hamburger.setAttribute('aria-expanded', isOpen);
+      hamburger.setAttribute('aria-label', isOpen ? 'მენიუს დახურვა' : 'მენიუს გახსნა');
+      
+      document.body.style.overflow = isOpen ? 'hidden' : '';
+    }
+
+    function closeMenu() {
+      hamburger.classList.remove('is-active');
+      nav.classList.remove('is-open');
+      overlay.classList.remove('is-active');
+      hamburger.setAttribute('aria-expanded', 'false');
+      hamburger.setAttribute('aria-label', 'მენიუს გახსნა');
+      document.body.style.overflow = '';
+    }
+
+    hamburger.addEventListener('click', toggleMenu);
+    overlay.addEventListener('click', closeMenu);
+    
+    navLinks.forEach(link => {
+      link.addEventListener('click', closeMenu);
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && nav.classList.contains('is-open')) {
+        closeMenu();
+      }
+    });
+  }
+});
