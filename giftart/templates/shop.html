@@ -249,6 +249,9 @@
   background: #c38a62;
   color: #fff;
   border: none;
+  display: inline-block;
+  text-decoration: none;
+  text-align: center;
 
   padding: 8px 10px;   
   min-width: auto;     
@@ -550,9 +553,7 @@
       <h4 class="product-title">გოგონა და ძაღლი</h4>
       <div class="product-bottom">
   <span class="product-price">₾49</span>
- <button class="order-button" onclick="orderFromGallery(this)">
-  შეკვეთა
-</button>
+ <a href="{% url 'order_photo' %}" class="order-button">შეკვეთა</a>
 
 
 
@@ -571,9 +572,7 @@
       <h4 class="product-title">გალაკტიონის მთაწმინდის მთვარე</h4>
       <div class="product-bottom">
   <span class="product-price">₾49</span>
-<button class="order-button" onclick="orderFromGallery(this)">
-  შეკვეთა
-</button>
+<a href="{% url 'order_photo' %}" class="order-button">შეკვეთა</a>
 
 
 </div>
@@ -591,9 +590,7 @@
       <h4 class="product-title">აფხაზეთი</h4>
       <div class="product-bottom">
   <span class="product-price">₾49</span>
- <button class="order-button" onclick="orderFromGallery(this)">
-  შეკვეთა
-</button>
+ <a href="{% url 'order_photo' %}" class="order-button">შეკვეთა</a>
 
 
 </div>
@@ -610,10 +607,7 @@
       <h4 class="product-title">რაჭა-ლეჩხუმი</h4>
       <div class="product-bottom">
   <span class="product-price">₾49</span>
-  <a href="{% url 'order_photo' %}">
-  <button class="order-button">შეკვეთა</button>
-</a>
-
+  <a href="{% url 'order_photo' %}" class="order-button">შეკვეთა</a>
 </div>
 
     </div>
@@ -627,13 +621,8 @@
       <h4 class="product-title">მარგარიტა დეიდა</h4>
       <div class="product-bottom">
   <span class="product-price">₾49</span>
-  <a href="{% url 'order_photo' %}">
-  <button class="order-button">შეკვეთა</button>
-</a>
-
+  <a href="{% url 'order_photo' %}" class="order-button">შეკვეთა</a>
 </div>
-
-
 
     </div>
   </div>
@@ -645,12 +634,8 @@
       <h4 class="product-title"> ვოლფგანგ ამადეუს მოცარტი</h4>
       <div class="product-bottom">
   <span class="product-price">₾49</span>
-  <a href="{% url 'order_photo' %}">
-  <button class="order-button">შეკვეთა</button>
-</a>
-
+  <a href="{% url 'order_photo' %}" class="order-button">შეკვეთა</a>
 </div>
-
 
     </div>
   </div>
@@ -662,13 +647,8 @@
       <h4 class="product-title">გოგონა და ძაღლი</h4>
       <div class="product-bottom">
   <span class="product-price">₾49</span>
- <a href="{% url 'order_photo' %}">
-  <button class="order-button">შეკვეთა</button>
-</a>
-
+ <a href="{% url 'order_photo' %}" class="order-button">შეკვეთა</a>
 </div>
-
-
 
     </div>
   </div>
@@ -680,13 +660,8 @@
       <h4 class="product-title">ცხელი ძაღლი - კალდუნა</h4>
       <div class="product-bottom">
   <span class="product-price">₾49</span>
-  <a href="{% url 'order_photo' %}">
-  <button class="order-button">შეკვეთა</button>
-</a>
-
+  <a href="{% url 'order_photo' %}" class="order-button">შეკვეთა</a>
 </div>
-
-
 
     </div>
   </div>
@@ -714,9 +689,7 @@
 
   <div class="product-bottom">
     <span class="product-price">₾150 (⏱ 30 წამი)</span>
-    <a href="{% url 'order_video' %}">
-  <button class="order-button">შეკვეთა</button>
-</a>
+    <a href="{% url 'order_video' %}" class="order-button">შეკვეთა</a>
   </div>
 </div>
 
@@ -746,9 +719,7 @@
 
   <div class="product-bottom">
     <span class="product-price">₾150 (⏱ 30 წამი)</span>
-    <a href="{% url 'order_video' %}">
-  <button class="order-button">შეკვეთა</button>
-</a>
+    <a href="{% url 'order_video' %}" class="order-button">შეკვეთა</a>
   </div>
 </div>
   </div>
@@ -777,9 +748,7 @@
 
   <div class="product-bottom">
     <span class="product-price">₾150 (⏱ 30 წამი)</span>
-    <a href="{% url 'order_video' %}">
-  <button class="order-button">შეკვეთა</button>
-</a>
+    <a href="{% url 'order_video' %}" class="order-button">შეკვეთა</a>
   </div>
 </div>
   </div>
@@ -809,9 +778,7 @@
 
   <div class="product-bottom">
     <span class="product-price">₾150 (⏱ 30 წამი)</span>
-     <a href="{% url 'order_video' %}">
-  <button class="order-button">შეკვეთა</button>
-</a>
+     <a href="{% url 'order_video' %}" class="order-button">შეკვეთა</a>
   </div>
 </div>
   </div>

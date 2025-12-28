@@ -107,7 +107,7 @@ def order_photo(request):
         messages.success(request, "Your photo order has been placed successfully!")
         return redirect("order_photo")
 
-    return render(request, "order_photo.html")
+    return render(request, "order-photo.html")
 
 
 def order_video(request):
@@ -144,7 +144,7 @@ def order_video(request):
         messages.success(request, "Your video order has been placed successfully!")
         return redirect("order_video")
 
-    return render(request, "order_video.html")
+    return render(request, "order-video.html")
 
 def admin_login(request):
     if request.method == "POST":
