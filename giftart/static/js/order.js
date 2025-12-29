@@ -113,49 +113,35 @@ document.addEventListener("DOMContentLoaded", () => {
   const hamburger = document.querySelector('.hamburger');
   const nav = document.querySelector('.header nav');
   const overlay = document.querySelector('.nav-overlay');
-  const navLinks = document.querySelectorAll('.header nav a');
-
-  console.log('Hamburger elements:', {
-    hamburger: hamburger,
-    nav: nav,
-    overlay: overlay,
-    navLinksCount: navLinks.length
-  });
 
   if (hamburger && nav && overlay) {
-    console.log('All elements found! Setting up listeners...');
-    
     function toggleMenu() {
-      console.log('Toggle menu called!');
       hamburger.classList.toggle('is-active');
       nav.classList.toggle('is-open');
       overlay.classList.toggle('is-active');
       
       const isOpen = nav.classList.contains('is-open');
       hamburger.setAttribute('aria-expanded', isOpen);
-      hamburger.setAttribute('aria-label', isOpen ? 'მენიუს დახურვა' : 'მენიუს გახსნა');
-      
       document.body.style.overflow = isOpen ? 'hidden' : '';
     }
 
     function closeMenu() {
-      console.log('Close menu called!');
       hamburger.classList.remove('is-active');
       nav.classList.remove('is-open');
       overlay.classList.remove('is-active');
       hamburger.setAttribute('aria-expanded', 'false');
-      hamburger.setAttribute('aria-label', 'მენიუს გახსნა');
       document.body.style.overflow = '';
     }
 
     hamburger.addEventListener('click', (e) => {
-      console.log('Hamburger clicked!', e);
+      e.preventDefault();
+      e.stopPropagation();
       toggleMenu();
     });
     
     overlay.addEventListener('click', closeMenu);
     
-    navLinks.forEach(link => {
+    document.querySelectorAll('.header nav a').forEach(link => {
       link.addEventListener('click', closeMenu);
     });
 
@@ -163,14 +149,6 @@ document.addEventListener("DOMContentLoaded", () => {
       if (e.key === 'Escape' && nav.classList.contains('is-open')) {
         closeMenu();
       }
-    });
-    
-    console.log('Hamburger menu setup complete!');
-  } else {
-    console.error('Missing elements!', {
-      hasHamburger: !!hamburger,
-      hasNav: !!nav,
-      hasOverlay: !!overlay
     });
   }
  const steps = {
@@ -1279,7 +1257,6 @@ function validateDeliveryForOption(option) {
 
   return true;
 }
-
 
 
 
