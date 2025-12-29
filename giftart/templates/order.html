@@ -7,6 +7,7 @@
   <title>შეუკვეთე — Giftart.ge</title>
   <link rel="stylesheet" href="{% static 'css/style.css' %}">
   <style>
+    
 * { box-sizing: border-box; }
 
 body {
@@ -145,7 +146,7 @@ body {
 
 .card-title {
   margin: 0 0 12px;
-  color: #2a1f1b;
+  color: #6a4a3a;
   font-size: 18px;
 }
 
@@ -209,9 +210,10 @@ input[type="checkbox"] {
 
 .pill-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 12px;
+  grid-template-columns: 1fr;
+  gap: 10px;
 }
+
 
 .pill {
   border: 1px solid #e6ddd5;
@@ -597,6 +599,19 @@ input[type="checkbox"] {
 }
 
 @media (max-width: 768px) {
+  .pill-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+  }
+  
+  .pill {
+    padding: 10px 12px;
+    min-height: 44px;
+  }
+  
+  .pill span {
+    font-size: 13px;
+  }
  .hamburger {
   display: flex !important;
   position: relative !important;
@@ -677,6 +692,7 @@ input[type="checkbox"] {
   .frame-title {
     font-size: 22px;
     margin: 8px 0 12px;
+    color: #6a4a3a;
   }
 
   .page-subtitle {
@@ -742,6 +758,7 @@ input[type="checkbox"] {
     font-size: 15px;
     margin-bottom: 12px;
     font-weight: 600;
+    color: #6a4a3a;
   }
 
   .pill-grid {
@@ -907,6 +924,10 @@ input[type="checkbox"] {
   .sep {
     margin: 14px 0;
   }
+  #step-opt2 .pill-grid {
+    grid-template-columns: 1fr; 
+    gap: 10px;
+  }
 }
 
 @media (max-width: 480px) {
@@ -944,6 +965,7 @@ input[type="checkbox"] {
   .card-title {
     font-size: 16px;
     margin-bottom: 12px;
+    color: #6a4a3a;
   }
 
   .pill-grid {
@@ -1085,9 +1107,23 @@ input[type="checkbox"] {
 
   .card-title {
     font-size: 14px;
+    color: #6a4a3a;
   }
 }
 @media (max-width: 768px) {
+  .pill-grid {
+    grid-template-columns: repeat(2, 1fr); /* Still 2 columns */
+    gap: 8px;
+  }
+  
+  .pill {
+    padding: 10px 14px;
+    min-height: 44px;
+  }
+  
+  .pill span {
+    font-size: 13px;
+  }
   .footer-wrapper {
     margin-top: -1px;
     position: relative;
@@ -1164,6 +1200,82 @@ input[type="checkbox"] {
 
   .footer-copy {
     font-size: 12px;
+  }
+}
+/* Pill grid container */
+.pill-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* 2 columns by default */
+  gap: 10px;
+  margin-top: 12px;
+}
+
+/* Individual pill */
+.pill {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 16px;
+  background: #faf8f6;
+  border: 1px solid #e6ddd5;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+  min-height: 48px;
+}
+
+.pill:hover {
+  background: #f5f0eb;
+  border-color: #c38a62;
+}
+
+.pill input[type="radio"] {
+  width: 18px;
+  height: 18px;
+  margin: 0;
+  cursor: pointer;
+  flex-shrink: 0;
+  accent-color: #c38a62;
+}
+
+.pill span {
+  font-size: 14px;
+  color: #6a4a3a;
+  cursor: pointer;
+}
+
+/* When radio is checked */
+.pill:has(input:checked) {
+  background: #f5f0eb;
+  border-color: #c38a62;
+  border-width: 2px;
+}
+
+/* Tablet (768px and below) - Keep 2 columns */
+@media (max-width: 768px) {
+  .pill-grid {
+    grid-template-columns: repeat(2, 1fr); /* Still 2 columns */
+    gap: 8px;
+  }
+  
+  .pill {
+    padding: 10px 14px;
+    min-height: 44px;
+  }
+  
+  .pill span {
+    font-size: 13px;
+  }
+}
+
+/* Mobile (480px and below) - Stack to 1 column */
+@media (max-width: 480px) {
+  .pill-grid {
+    grid-template-columns: 1fr; /* Single column on mobile */
+  }
+  
+  .pill {
+    padding: 12px 16px;
   }
 }
   </style>

@@ -482,6 +482,68 @@ input[type="checkbox"] {
 }
 
 @media (max-width: 768px) {
+  .footer-wrapper {
+    margin-top: -1px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .footer-wave {
+    position: relative;
+    margin-top:-1px;
+    line-height:0;
+  }
+
+  .footer-wave svg {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  .wave-content {
+    position: relative;
+    z-index: 2;
+    padding: 0px 15px;
+    background:#6a4a3a;
+  }
+
+  .footer-middle {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    padding: 0 15px;
+  }
+
+  .footer-block {
+    width: 100%;
+    text-align: center;
+  }
+
+  .footer-block h2 {
+    font-size: 20px;
+    margin-bottom: 15px;
+    color: #fff;
+  }
+
+  .footer-block a {
+    display: block;
+    padding: 8px 0;
+    font-size: 15px;
+    color: #fff;
+  }
+
+  .footer-block p {
+    font-size: 15px;
+    margin: 8px 0;
+    color: #fff;
+  }
+
+  .footer-copy {
+    font-size: 13px;
+    padding: 15px;
+    text-align: center;
+    color: #fff;
+  }
   .order-page {
     padding: 50px 12px 30px;
   }
@@ -663,26 +725,187 @@ input[type="checkbox"] {
     padding: 18px;
   }
 }
+/* Hamburger Menu - EXACT COPY from aboutus */
+.hamburger {
+  display: none;
+  width: 40px;
+  height: 40px;
+  border: none;
+  background: transparent;
+  padding: 8px;
+  cursor: pointer;
+  flex-shrink: 0;
+  z-index: 1001;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+}
+
+.hamburger span {
+  display: block;
+  width: 24px;
+  height: 2.5px;
+  background: #6a4a3a;
+  border-radius: 3px;
+  transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
+}
+
+.hamburger:hover {
+  transform: scale(1.05);
+}
+
+.hamburger.is-active span:nth-child(1) {
+  transform: translateY(7.5px) rotate(45deg);
+}
+
+.hamburger.is-active span:nth-child(2) {
+  opacity: 0;
+}
+
+.hamburger.is-active span:nth-child(3) {
+  transform: translateY(-7.5px) rotate(-45deg);
+}
+
+.hamburger:active {
+  transform: scale(0.95);
+}
+
+.header .nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.main-nav {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+}
+
+.nav-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: 998;
+  pointer-events: none;
+}
+
+.nav-overlay.is-active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+@media (max-width: 768px) {
+  .hamburger {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .nav-overlay {
+    display: block;
+  }
+
+  .main-nav {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 280px;
+    height: 100vh;
+    background: #ffffff;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0;
+    padding: 80px 30px 30px;
+    transform: translateX(100%);
+    transition: transform 0.4s cubic-bezier(0.645, 0.045, 0.355, 1);
+    box-shadow: -10px 0 30px rgba(0, 0, 0, 0.15);
+    z-index: 1000;
+    overflow-y: auto;
+  }
+
+  .main-nav.is-open {
+    transform: translateX(0);
+  }
+
+  .main-nav a {
+    width: 100%;
+    padding: 16px 20px;
+    font-size: 18px;
+    border-radius: 12px;
+    margin-bottom: 8px;
+    opacity: 0;
+    transform: translateX(30px);
+    transition: all 0.3s ease;
+  }
+
+  .main-nav.is-open a {
+    animation: slideIn 0.3s ease forwards;
+  }
+
+  .main-nav.is-open a:nth-child(1) { animation-delay: 0.1s; }
+  .main-nav.is-open a:nth-child(2) { animation-delay: 0.15s; }
+  .main-nav.is-open a:nth-child(3) { animation-delay: 0.2s; }
+  .main-nav.is-open a:nth-child(4) { animation-delay: 0.25s; }
+  .main-nav.is-open a:nth-child(5) { animation-delay: 0.3s; }
+
+  .main-nav a:hover {
+    background: rgba(195, 138, 98, 0.1);
+    transform: translateX(5px);
+  }
+
+  @keyframes slideIn {
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+}
+@media (max-width: 480px) {
+  .footer-block h2 {
+    font-size: 18px;
+  }
+
+  .footer-block a,
+  .footer-block p {
+    font-size: 14px;
+  }
+
+  .footer-copy {
+    font-size: 12px;
+  }
+}
   </style>
 </head>
 
 <body>
   <div class="page">
-  <header class="header">
+ <header class="header">
   <div class="container nav">
     <a href="{% url 'home' %}" class="logo">
-  Giftart<span>.ge</span>
-</a>
+      Giftart<span>.ge</span>
+    </a>
 
-    <nav>
-      <a  href="{% url 'home' %}">მთავარი</a>
-      <a href="{% url 'shop' %}">გალერეა</a>
-      <a class="active" href="{% url 'order' %}">შეუკვეთე</a>
-      <a href="{% url 'aboutus' %}">ჩვენ შესახებ</a>
-      <a href="{% url 'contact' %}">კონტაქტი</a>
+    <button class="hamburger" aria-label="Toggle menu" aria-expanded="false">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
 
-    </nav>
+   <nav class="main-nav">
+  <a href="{% url 'home' %}">მთავარი</a>
+  <a href="{% url 'shop' %}">გალერეა</a>
+  <a class="active" href="{% url 'order' %}">შეუკვეთე</a>
+  <a href="{% url 'aboutus' %}">ჩვენ შესახებ</a>
+  <a href="{% url 'contact' %}">კონტაქტი</a>
+</nav>
   </div>
+  <div class="nav-overlay"></div>
 </header>
   <main class="order-page">
 
