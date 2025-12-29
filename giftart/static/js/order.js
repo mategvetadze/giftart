@@ -586,7 +586,7 @@ if (from === "photo" || from === "video" || from === "greeting") {
   });
 
   
-  peopleCount?.addEventListener("change", () => {
+ peopleCount?.addEventListener("change", () => {
     const count = Number(peopleCount.value || 0);
     peopleFields.innerHTML = "";
 
@@ -607,13 +607,10 @@ if (from === "photo" || from === "video" || from === "greeting") {
             <input id="p_surname_${i}" type="text" />
           </label>
         </div>
-        <div class="two-col">
-          <label class="field">
-            <span>ასაკი</span>
-            <input id="p_age_${i}" type="number" min="1" />
-          </label>
-          <div></div>
-        </div>
+        <label class="field" style="max-width: 200px;">
+          <span>ასაკი</span>
+          <input id="p_age_${i}" type="number" min="1" />
+        </label>
         <label class="field">
           <span>მოკლე აღწერა</span>
           <textarea id="p_about_${i}" rows="3" placeholder="მაგ: რა უყვარს, რა სტილი გინდა..."></textarea>

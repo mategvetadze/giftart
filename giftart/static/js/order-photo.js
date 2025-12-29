@@ -48,6 +48,47 @@ function fileToBase64(file) {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
+  const hamburger = document.querySelector('.hamburger');
+  const nav = document.querySelector('.header nav');
+  const overlay = document.querySelector('.nav-overlay');
+
+  if (hamburger && nav && overlay) {
+    function toggleMenu() {
+      hamburger.classList.toggle('is-active');
+      nav.classList.toggle('is-open');
+      overlay.classList.toggle('is-active');
+      
+      const isOpen = nav.classList.contains('is-open');
+      hamburger.setAttribute('aria-expanded', isOpen);
+      document.body.style.overflow = isOpen ? 'hidden' : '';
+    }
+
+    function closeMenu() {
+      hamburger.classList.remove('is-active');
+      nav.classList.remove('is-open');
+      overlay.classList.remove('is-active');
+      hamburger.setAttribute('aria-expanded', 'false');
+      document.body.style.overflow = '';
+    }
+
+    hamburger.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      toggleMenu();
+    });
+    
+    overlay.addEventListener('click', closeMenu);
+    
+    document.querySelectorAll('.header nav a').forEach(link => {
+      link.addEventListener('click', closeMenu);
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && nav.classList.contains('is-open')) {
+        closeMenu();
+      }
+    });
+  }
   
   steps = [...document.querySelectorAll(".order-step")];
   let index = 0;

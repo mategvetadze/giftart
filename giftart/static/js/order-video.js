@@ -1,6 +1,47 @@
 let videoFiles = [];
 let receiptFile=null;
 document.addEventListener("DOMContentLoaded", () => {
+  const hamburger = document.querySelector('.hamburger');
+  const nav = document.querySelector('.main-nav');
+  const overlay = document.querySelector('.nav-overlay');
+
+  if (hamburger && nav && overlay) {
+    function toggleMenu() {
+      hamburger.classList.toggle('is-active');
+      nav.classList.toggle('is-open');
+      overlay.classList.toggle('is-active');
+      
+      const isOpen = nav.classList.contains('is-open');
+      hamburger.setAttribute('aria-expanded', isOpen);
+      document.body.style.overflow = isOpen ? 'hidden' : '';
+    }
+
+    function closeMenu() {
+      hamburger.classList.remove('is-active');
+      nav.classList.remove('is-open');
+      overlay.classList.remove('is-active');
+      hamburger.setAttribute('aria-expanded', 'false');
+      document.body.style.overflow = '';
+    }
+
+    hamburger.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      toggleMenu();
+    });
+    
+    overlay.addEventListener('click', closeMenu);
+    
+    document.querySelectorAll('.main-nav a').forEach(link => {
+      link.addEventListener('click', closeMenu);
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && nav.classList.contains('is-open')) {
+        closeMenu();
+      }
+    });
+  }
  function validatePaymentStep() {
   const firstName = document.getElementById('firstName');
   const lastName  = document.getElementById('lastName');
