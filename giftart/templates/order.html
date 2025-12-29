@@ -597,7 +597,8 @@ input[type="checkbox"] {
 }
 
 @media (max-width: 768px) {
-  .hamburger {
+ .hamburger {
+  display: flex !important;
   position: relative !important;
   z-index: 9999 !important;
   pointer-events: auto !important;
@@ -1086,6 +1087,85 @@ input[type="checkbox"] {
     font-size: 14px;
   }
 }
+@media (max-width: 768px) {
+  .footer-wrapper {
+    margin-top: -1px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .footer-wave {
+    position: relative;
+    margin-top:-1px;
+    line-height:0;
+  }
+
+  .footer-wave svg {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  .wave-content {
+    position: relative;
+    z-index: 2;
+    padding: 0px 15px;
+    background:#6a4a3a;
+  }
+
+  .footer-middle {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    padding: 0 15px;
+  }
+
+  .footer-block {
+    width: 100%;
+    text-align: center;
+  }
+
+  .footer-block h2 {
+    font-size: 20px;
+    margin-bottom: 15px;
+    color: #fff;
+  }
+
+  .footer-block a {
+    display: block;
+    padding: 8px 0;
+    font-size: 15px;
+    color: #fff;
+  }
+
+  .footer-block p {
+    font-size: 15px;
+    margin: 8px 0;
+    color: #fff;
+  }
+
+  .footer-copy {
+    font-size: 13px;
+    padding: 15px;
+    text-align: center;
+    color: #fff;
+  }
+}
+
+@media (max-width: 480px) {
+  .footer-block h2 {
+    font-size: 18px;
+  }
+
+  .footer-block a,
+  .footer-block p {
+    font-size: 14px;
+  }
+
+  .footer-copy {
+    font-size: 12px;
+  }
+}
   </style>
 </head>
 
@@ -1103,8 +1183,6 @@ input[type="checkbox"] {
       <span></span>
     </button>
 
-    <div class="nav-overlay"></div>
-
     <nav>
       <a href="{% url 'home' %}">მთავარი</a>
       <a href="{% url 'shop' %}">გალერეა</a>
@@ -1114,6 +1192,8 @@ input[type="checkbox"] {
     </nav>
   </div>
 </header>
+
+<div class="nav-overlay"></div>
   <main class="order-page">
     <section class="progress">
       <div class="progress-bar"><div id="progressFill" class="progress-fill"></div></div>
