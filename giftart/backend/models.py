@@ -1,6 +1,13 @@
 from django.db import models
+from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
+
 
 # Create your models here.
+
+def User(AbstractUser):
+    id=models.AutoField(primary_key=True,auto_created=True,serialize=False,verbose_name='ID')
+    name=models.CharField(max_length=150, blank=True)
+    password=models.CharField(max_length=150, blank=True)
 
 class ContactMessage(models.Model):
     name = models.CharField(max_length=150)
